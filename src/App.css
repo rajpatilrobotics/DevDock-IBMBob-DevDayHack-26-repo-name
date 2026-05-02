@@ -831,7 +831,44 @@
   line-height: 1.4;
 }
 
+/* Component badges inside layers */
+.layer-components {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0;
+  justify-content: center;
+}
+
+.component-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.component-badge:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
 /* Layer-specific colors */
+.client-layer {
+  border-color: #ff6b9d;
+  background: linear-gradient(135deg, rgba(255, 107, 157, 0.08) 0%, var(--bg-tertiary) 100%);
+}
+
+.client-layer:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.3);
+}
+
 .frontend-layer {
   border-color: #61dafb;
   background: linear-gradient(135deg, rgba(97, 218, 251, 0.08) 0%, var(--bg-tertiary) 100%);
@@ -859,6 +896,15 @@
   box-shadow: 0 6px 20px rgba(104, 160, 99, 0.3);
 }
 
+.cache-layer {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, var(--bg-tertiary) 100%);
+}
+
+.cache-layer:hover {
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
 .data-layer {
   border-color: #f29111;
   background: linear-gradient(135deg, rgba(242, 145, 17, 0.08) 0%, var(--bg-tertiary) 100%);
@@ -866,6 +912,15 @@
 
 .data-layer:hover {
   box-shadow: 0 6px 20px rgba(242, 145, 17, 0.3);
+}
+
+.external-layer {
+  border-color: #00d4ff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, var(--bg-tertiary) 100%);
+}
+
+.external-layer:hover {
+  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
 }
 
 .arch-description {
