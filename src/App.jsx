@@ -16,6 +16,9 @@ import Documentation from './components/TabContent/Documentation';
 import SecurityScanner from './components/TabContent/SecurityScanner';
 import Chat from './components/TabContent/Chat';
 
+// GitHub Service
+import { analyzeRepository } from './services/githubService';
+
 function App() {
   const [repoUrl, setRepoUrl] = useState('');
   const [previousUrl, setPreviousUrl] = useState('');
@@ -23,6 +26,9 @@ function App() {
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const [activeTab, setActiveTab] = useState('summary');
   const [repoSize, setRepoSize] = useState(0);
+  const [repoData, setRepoData] = useState(null);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
   const resultsRef = useRef(null);
 
   const tabs = [
@@ -39,6 +45,8 @@ function App() {
     if (repoUrl !== previousUrl && previousUrl !== '') {
       setAnalysisComplete(false);
       setActiveTab('summary');
+      setError(null);
+      setSuccessMessage('');
     }
     setPreviousUrl(repoUrl);
   }, [repoUrl, previousUrl]);
@@ -55,20 +63,39 @@ function App() {
     }
   }, [analysisComplete]);
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!repoUrl.trim()) return;
     
     setIsAnalyzing(true);
     setAnalysisComplete(false);
+    setError(null);
+    setSuccessMessage('');
     
-    // Simulate API call with random repo size
-    setTimeout(() => {
-      const randomSize = Math.floor(Math.random() * 500) + 100; // 100-600 files
-      setRepoSize(randomSize);
-      setIsAnalyzing(false);
+    try {
+      const data = await analyzeRepository(repoUrl);
+      
+      if (data.error) {
+        setError(data.error);
+        setIsAnalyzing(false);
+        return;
+      }
+      
+      setRepoData(data);
+      setRepoSize(data.fileTree.length);
+      setSuccessMessage('Repository analyzed successfully! ✓');
       setAnalysisComplete(true);
       setActiveTab('summary');
-    }, 2500);
+      
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
+      
+    } catch (err) {
+      setError(err.message || 'An unexpected error occurred');
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleQuickOnboard = () => {
@@ -94,7 +121,7 @@ function App() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
-        return <Summary repoUrl={repoUrl} repoSize={repoSize} />;
+        return <Summary repoUrl={repoUrl} repoSize={repoSize} repoData={repoData} />;
       case 'architecture':
         return <Architecture />;
       case 'onboarding':
@@ -106,7 +133,7 @@ function App() {
       case 'chat':
         return <Chat />;
       default:
-        return <Summary repoUrl={repoUrl} repoSize={repoSize} />;
+        return <Summary repoUrl={repoUrl} repoSize={repoSize} repoData={repoData} />;
     }
   };
 
@@ -153,6 +180,27 @@ function App() {
             isAnalyzing={isAnalyzing}
             disabled={isAnalyzing}
           />
+
+          {/* Success Message Banner */}
+          {successMessage && (
+            <div className="message-banner success-banner">
+              {successMessage}
+            </div>
+          )}
+
+          {/* Error Message Banner */}
+          {error && (
+            <div className="message-banner error-banner">
+              <span className="error-icon">⚠️</span>
+              <span className="error-text">{error}</span>
+              <button
+                className="retry-button"
+                onClick={() => setError(null)}
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
 
           <LoadingSpinner isVisible={isAnalyzing} />
 
