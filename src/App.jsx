@@ -26,6 +26,9 @@ import { generateText } from './services/watsonxService';
 // Code Analysis Service
 import { codeAnalysisService } from './services/codeAnalysisService';
 
+// Text Formatting Utilities
+import { CLEAN_OUTPUT_RULES, cleanMarkdown } from './utils/textFormatting';
+
 function App() {
   const [repoUrl, setRepoUrl] = useState('');
   const [previousUrl, setPreviousUrl] = useState('');
@@ -192,7 +195,9 @@ ${readmeSnippet}
       setIsSummaryLoading(true);
       try {
         const aiInput = prepareAIInput(data);
-        const prompt = `You are a developer onboarding assistant. Analyze this GitHub repository and provide a plain English summary covering:
+        const prompt = `${CLEAN_OUTPUT_RULES}
+
+You are a developer onboarding assistant. Analyze this GitHub repository and provide a plain English summary covering:
 - What this project does
 - Who it is for
 - The main technology stack
@@ -207,7 +212,8 @@ ${aiInput}`;
           temperature: 0.7
         });
         
-        setAiSummary(generatedSummary);
+        const cleanedSummary = cleanMarkdown(generatedSummary);
+        setAiSummary(cleanedSummary);
       } catch (summaryErr) {
         console.error('AI Summary generation failed:', summaryErr);
         setSummaryError(summaryErr.message || 'Failed to generate AI summary');
@@ -221,7 +227,9 @@ ${aiInput}`;
         const packageJson = data.importantFiles.find(f => f.path === 'package.json');
         const hasPackageJson = packageJson && !packageJson.error;
         
-        const quickStartPrompt = `Generate a concise Quick Start Guide for this repository. Include:
+        const quickStartPrompt = `${CLEAN_OUTPUT_RULES}
+
+Generate a concise Quick Start Guide for this repository. Include:
 1. Prerequisites (Node.js version, etc.)
 2. Installation steps
 3. Configuration (environment variables)
@@ -239,7 +247,8 @@ Keep it practical and actionable. Use numbered steps.`;
           temperature: 0.5
         });
         
-        setQuickStartGuide(quickStart);
+        const cleanedQuickStart = cleanMarkdown(quickStart);
+        setQuickStartGuide(cleanedQuickStart);
       } catch (quickStartErr) {
         console.error('Quick Start generation failed:', quickStartErr);
       } finally {
@@ -249,7 +258,9 @@ Keep it practical and actionable. Use numbered steps.`;
       // Step 4: Generate Common Issues & Solutions using watsonx.ai
       setIsIssuesLoading(true);
       try {
-        const issuesPrompt = `Based on this repository, identify 3-4 common setup issues that new developers might face and provide solutions:
+        const issuesPrompt = `${CLEAN_OUTPUT_RULES}
+
+Based on this repository, identify 3-4 common setup issues that new developers might face and provide solutions:
 
 Repository: ${data.repoInfo.name}
 Language: ${data.repoInfo.language}
@@ -269,7 +280,8 @@ Format as: "Issue: [problem] → Solution: [fix]"`;
           temperature: 0.6
         });
         
-        setCommonIssues(issues);
+        const cleanedIssues = cleanMarkdown(issues);
+        setCommonIssues(cleanedIssues);
       } catch (issuesErr) {
         console.error('Common Issues generation failed:', issuesErr);
       } finally {
@@ -279,7 +291,9 @@ Format as: "Issue: [problem] → Solution: [fix]"`;
       // Step 5: Generate First Contribution Suggestions using watsonx.ai
       setIsContributionsLoading(true);
       try {
-        const contributionsPrompt = `Analyze this repository and suggest 3-5 beginner-friendly tasks that a new developer could tackle as their first contribution. Be specific and actionable.
+        const contributionsPrompt = `${CLEAN_OUTPUT_RULES}
+
+Analyze this repository and suggest 3-5 beginner-friendly tasks that a new developer could tackle as their first contribution. Be specific and actionable.
 
 Repository: ${data.repoInfo.name}
 Language: ${data.repoInfo.language}
@@ -293,7 +307,7 @@ Suggest tasks like:
 - Add input validation
 - Refactor repetitive code patterns
 
-IMPORTANT: Write in plain text only. Format each suggestion as:
+Format each suggestion as:
 "Task: [specific task]
 File: [filename]
 Difficulty: [Easy/Medium]
@@ -306,8 +320,9 @@ Provide 3-5 suggestions.`;
           temperature: 0.7
         });
         
+        const cleanedSuggestions = cleanMarkdown(suggestions);
         // Parse the suggestions into structured format
-        const parsedSuggestions = parseSuggestions(suggestions);
+        const parsedSuggestions = parseSuggestions(cleanedSuggestions);
         setFirstContributions(parsedSuggestions);
       } catch (contributionsErr) {
         console.error('First Contributions generation failed:', contributionsErr);
@@ -319,7 +334,9 @@ Provide 3-5 suggestions.`;
       setIsArchitectureLoading(true);
       try {
         const architectureInput = prepareArchitectureInput(data);
-        const architecturePrompt = `You are a software architect. Analyze this repository and provide:
+        const architecturePrompt = `${CLEAN_OUTPUT_RULES}
+
+You are a software architect. Analyze this repository and provide:
 
 1. Component breakdown – major modules and their roles
 2. Technology architecture – frontend, backend, database, APIs
@@ -336,7 +353,8 @@ Keep response structured, concise, and easy to scan using bullet points.`;
           temperature: 0.6
         });
         
-        setArchitectureAnalysis(architectureResponse);
+        const cleanedArchitecture = cleanMarkdown(architectureResponse);
+        setArchitectureAnalysis(cleanedArchitecture);
         
         // Step 6b: Perform detailed architecture analysis
         const detailedAnalysis = analyzeArchitecture(data.fileTree, data.importantFiles);

@@ -7,12 +7,16 @@ import ReactFlow, {
   useEdgesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { FunctionCallFlowDiagram, FileStructureDiagram, DataFlowFromCodeDiagram } from './CodeAnalysisDiagrams';
+import { FunctionCallFlowDiagram, FileStructureDiagram } from './CodeAnalysisDiagrams';
 import DynamicDataFlowDiagram from './DynamicDataFlowDiagram';
+import { cleanMarkdown } from '../../utils/textFormatting';
 
 // Architecture Analysis Display Component with Enhanced Typography
 function ArchitectureAnalysisDisplay({ analysis }) {
-  // Parse the AI response into structured sections
+  // Clean markdown from analysis before parsing
+  const cleanedAnalysis = cleanMarkdown(analysis);
+  
+  // Parse the cleaned AI response into structured sections
   const parseAnalysis = (text) => {
     const sections = [];
     const lines = text.split('\n');
@@ -93,7 +97,7 @@ function ArchitectureAnalysisDisplay({ analysis }) {
     }];
   };
 
-  const sections = parseAnalysis(analysis);
+  const sections = parseAnalysis(cleanedAnalysis);
 
   // Format bullet points and content
   const formatContent = (content) => {
@@ -2168,9 +2172,6 @@ function Architecture({ repoData, architectureAnalysis, isArchitectureLoading, a
         </div>
       ) : codeAnalysis && codeAnalysis.definitions && codeAnalysis.files ? (
         <>
-          {/* Data Flow from Real Code */}
-          <DataFlowFromCodeDiagram codeAnalysis={codeAnalysis} />
-          
           {/* Function Call Flow */}
           <FunctionCallFlowDiagram codeAnalysis={codeAnalysis} />
           

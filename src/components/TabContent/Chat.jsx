@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { generateText } from '../../services/watsonxService';
+import { CLEAN_OUTPUT_RULES, cleanMarkdown } from '../../utils/textFormatting';
 
 // PHASE 2: Response Cache Class
 class ResponseCache {
@@ -325,6 +326,8 @@ function Chat({ repoData, codeAnalysis, isCodeAnalysisLoading }) {
     return `You are a senior software engineer assistant who has fully analyzed a GitHub repository.
 Your job is to answer questions about this codebase accurately and helpfully.
 
+${CLEAN_OUTPUT_RULES}
+
 STRICT RULES:
 - Answer ONLY based on the repository context provided
 - Do NOT hallucinate features, files, or logic
@@ -334,7 +337,6 @@ STRICT RULES:
 - Prefer practical explanations over theory
 - Use bullet points when helpful
 - Always suggest a follow up question at the end
-- Format code snippets with proper labels
 - If asked about setup always include exact commands
 
 REPOSITORY CONTEXT:
@@ -551,14 +553,17 @@ RESPONSE FORMAT:
         topP: 0.9
       });
 
+      // Clean markdown formatting from response
+      const cleanedResponse = cleanMarkdown(response);
+
       // PHASE 2: Validate structured response
-      const validation = validateStructuredResponse(response, repoContext);
+      const validation = validateStructuredResponse(cleanedResponse, repoContext);
       if (!validation.valid) {
         console.warn('⚠️ Response validation issues:', validation.issues);
       }
 
       // PHASE 1: Validate response
-      const validatedResponse = validateResponse(response);
+      const validatedResponse = validateResponse(cleanedResponse);
 
       // PHASE 2: Cache the response
       responseCache.set(currentInput, validatedResponse);
