@@ -431,7 +431,7 @@ Keep response structured, concise, and easy to scan using bullet points.`;
       case 'documentation':
         return <Documentation />;
       case 'security':
-        return <SecurityScanner />;
+        return <SecurityScanner repoData={repoData} />;
       case 'chat':
         return <Chat />;
       default:

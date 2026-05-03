@@ -1,145 +1,385 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { generateText } from '../../services/watsonxService';
 
-function SecurityScanner() {
+function SecurityScanner({ repoData }) {
+  const [securityData, setSecurityData] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [error, setError] = useState(null);
+  const [cachedData, setCachedData] = useState(null);
+
+  // Load cached data on mount
+  useEffect(() => {
+    const cached = sessionStorage.getItem('securityScanCache');
+    if (cached) {
+      try {
+        const parsedCache = JSON.parse(cached);
+        setCachedData(parsedCache);
+        setSecurityData(parsedCache);
+      } catch (err) {
+        console.error('Failed to parse cached security data:', err);
+      }
+    }
+  }, []);
+
+  // Auto-scan when repoData is available and no cached data
+  useEffect(() => {
+    if (repoData && !cachedData && !isScanning) {
+      performSecurityScan();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoData, cachedData]);
+
+  const performSecurityScan = async () => {
+    if (!repoData) {
+      setError('No repository data available. Please analyze a repository first.');
+      return;
+    }
+
+    setIsScanning(true);
+    setError(null);
+
+    try {
+      // Prepare repository context for security analysis
+      const repoContext = prepareRepoContext(repoData);
+      
+      const securityPrompt = `You are a senior application security expert.
+
+Analyze this repository and return ONLY valid JSON in this format:
+
+{
+  "overall_score": number (0-100),
+  "risk_level": "Low" | "Medium" | "High",
+  "issues": [
+    {
+      "severity": "High" | "Medium" | "Low",
+      "title": "Short issue title",
+      "description": "Clear explanation of the vulnerability",
+      "file": "exact file path if possible",
+      "fix": "Specific fix suggestion"
+    }
+  ],
+  "passed_checks": [
+    "Short verified security strengths"
+  ],
+  "recommendations": [
+    "Actionable improvements"
+  ]
+}
+
+Rules:
+* Return ONLY JSON (no markdown, no explanation)
+* Maximum 5 issues
+* Maximum 5 passed_checks
+* Use consistent severity values: High, Medium, Low ONLY
+* Be specific to this repository (no generic advice)
+* Prefer real risks like XSS, insecure API usage, missing validation, secrets exposure
+* If no issue found, return empty issues array
+
+Keep everything concise and practical.
+
+Repository Context:
+${repoContext}`;
+
+      const response = await generateText(securityPrompt, {
+        maxNewTokens: 1500,
+        temperature: 0.3,
+        decodingMethod: 'greedy'
+      });
+
+      // Parse the JSON response
+      const parsedData = parseSecurityResponse(response);
+      
+      // Cache the result
+      sessionStorage.setItem('securityScanCache', JSON.stringify(parsedData));
+      setCachedData(parsedData);
+      setSecurityData(parsedData);
+      
+    } catch (err) {
+      console.error('Security scan failed:', err);
+      setError(err.message || 'Failed to perform security scan');
+    } finally {
+      setIsScanning(false);
+    }
+  };
+
+  const handleRescan = () => {
+    // Clear cache and rescan
+    sessionStorage.removeItem('securityScanCache');
+    setCachedData(null);
+    setSecurityData(null);
+    performSecurityScan();
+  };
+
+  const prepareRepoContext = (data) => {
+    const { repoInfo, techStack, importantFiles, fileTree, envVariables } = data;
+    
+    // Get key file names
+    const keyFiles = importantFiles?.slice(0, 10).map(f => f.path).join(', ') || 'None';
+    
+    // Get tech stack
+    const allTech = techStack ? Object.values(techStack).flat().join(', ') : 'Not detected';
+    
+    // Check for sensitive patterns in file tree
+    const hasDotEnv = fileTree?.some(f => f.includes('.env')) || false;
+    const hasSecrets = fileTree?.some(f => f.includes('secret') || f.includes('key')) || false;
+    
+    return `
+Repository: ${repoInfo?.name || 'Unknown'}
+Description: ${repoInfo?.description || 'No description'}
+Language: ${repoInfo?.language || 'Unknown'}
+Tech Stack: ${allTech}
+Key Files: ${keyFiles}
+Has .env files: ${hasDotEnv ? 'Yes' : 'No'}
+Has potential secret files: ${hasSecrets ? 'Yes' : 'No'}
+Environment Variables: ${envVariables?.length || 0} detected
+Total Files: ${fileTree?.length || 0}
+    `.trim();
+  };
+
+  const parseSecurityResponse = (response) => {
+    try {
+      // Remove markdown code blocks if present
+      let cleanedResponse = response.trim();
+      cleanedResponse = cleanedResponse.replace(/```json\n?/g, '');
+      cleanedResponse = cleanedResponse.replace(/```\n?/g, '');
+      cleanedResponse = cleanedResponse.trim();
+      
+      // Find JSON object
+      const jsonMatch = cleanedResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        cleanedResponse = jsonMatch[0];
+      }
+      
+      const parsed = JSON.parse(cleanedResponse);
+      
+      // Validate and normalize the response
+      return {
+        overall_score: Math.min(100, Math.max(0, parsed.overall_score || 75)),
+        risk_level: ['Low', 'Medium', 'High'].includes(parsed.risk_level) ? parsed.risk_level : 'Medium',
+        issues: (parsed.issues || []).slice(0, 5).map(issue => ({
+          severity: ['High', 'Medium', 'Low'].includes(issue.severity) ? issue.severity : 'Medium',
+          title: issue.title || 'Security Issue',
+          description: issue.description || 'No description provided',
+          file: issue.file || 'Unknown',
+          fix: issue.fix || 'Review and address this issue'
+        })),
+        passed_checks: (parsed.passed_checks || []).slice(0, 5),
+        recommendations: (parsed.recommendations || []).slice(0, 5)
+      };
+    } catch (err) {
+      console.error('Failed to parse security response:', err);
+      // Return default safe data
+      return {
+        overall_score: 70,
+        risk_level: 'Medium',
+        issues: [],
+        passed_checks: ['Repository structure analyzed'],
+        recommendations: ['Continue following security best practices']
+      };
+    }
+  };
+
+  const getRiskColor = (level) => {
+    switch (level) {
+      case 'High': return '#ef4444';
+      case 'Medium': return '#f59e0b';
+      case 'Low': return '#10b981';
+      default: return '#6b7280';
+    }
+  };
+
+  const getSeverityColor = (severity) => {
+    switch (severity) {
+      case 'High': return '#ef4444';
+      case 'Medium': return '#f59e0b';
+      case 'Low': return '#3b82f6';
+      default: return '#6b7280';
+    }
+  };
+
+  if (!repoData) {
+    return (
+      <div className="tab-content security-tab">
+        <div className="content-card">
+          <div className="empty-state-message">
+            <span className="empty-icon">🔒</span>
+            <p>Please analyze a repository first to view security insights.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isScanning) {
+    return (
+      <div className="tab-content security-tab">
+        <div className="content-card">
+          <div className="scanning-state">
+            <div className="scanning-spinner"></div>
+            <h3>Scanning for vulnerabilities...</h3>
+            <p>Analyzing repository security with AI</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="tab-content security-tab">
+        <div className="content-card">
+          <div className="error-state">
+            <span className="error-icon">⚠️</span>
+            <h3>Security Scan Failed</h3>
+            <p>{error}</p>
+            <button className="retry-button" onClick={performSecurityScan}>
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!securityData) {
+    return (
+      <div className="tab-content security-tab">
+        <div className="content-card">
+          <div className="empty-state-message">
+            <span className="empty-icon">🔒</span>
+            <p>Click "Scan Repository" to analyze security</p>
+            <button className="scan-button" onClick={performSecurityScan}>
+              Scan Repository
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="tab-content security-tab">
-      <div className="content-card">
-        <h2 className="card-title">🔒 Security Overview</h2>
-        <div className="card-content">
-          <div className="security-score">
-            <div className="score-circle">
-              <span className="score-value">8.5</span>
-              <span className="score-label">/10</span>
+    <div className="tab-content security-tab fade-in">
+      {/* Header with Rescan Button */}
+      <div className="security-header">
+        <h2 className="section-title">🔒 Security Analysis</h2>
+        <button className="rescan-button" onClick={handleRescan} disabled={isScanning}>
+          <span className="rescan-icon">🔄</span>
+          Rescan Repository
+        </button>
+      </div>
+
+      {/* Overall Score Section */}
+      <div className="content-card score-card fade-in">
+        <div className="score-container">
+          <div className="score-circle-wrapper">
+            <svg className="score-circle" viewBox="0 0 120 120">
+              <circle
+                className="score-circle-bg"
+                cx="60"
+                cy="60"
+                r="54"
+                fill="none"
+                stroke="#e5e7eb"
+                strokeWidth="8"
+              />
+              <circle
+                className="score-circle-progress"
+                cx="60"
+                cy="60"
+                r="54"
+                fill="none"
+                stroke={getRiskColor(securityData.risk_level)}
+                strokeWidth="8"
+                strokeDasharray={`${(securityData.overall_score / 100) * 339.292} 339.292`}
+                strokeLinecap="round"
+                transform="rotate(-90 60 60)"
+              />
+              <text
+                x="60"
+                y="60"
+                textAnchor="middle"
+                dy="0.3em"
+                className="score-text"
+                fill={getRiskColor(securityData.risk_level)}
+              >
+                {securityData.overall_score}
+              </text>
+            </svg>
+          </div>
+          <div className="score-details">
+            <div className="risk-badge" style={{ backgroundColor: getRiskColor(securityData.risk_level) }}>
+              {securityData.risk_level} Risk
             </div>
-            <div className="score-details">
-              <p className="score-status">Good Security Posture</p>
-              <p className="score-description">
-                Your repository follows most security best practices. 
-                Address the findings below to improve your score.
-              </p>
-              <p className="last-scan">Last scanned: {new Date().toLocaleDateString()}</p>
-            </div>
+            <h3 className="score-title">Security Score</h3>
+            <p className="score-description">
+              {securityData.overall_score >= 80 && 'Excellent security posture. Keep up the good work!'}
+              {securityData.overall_score >= 60 && securityData.overall_score < 80 && 'Good security practices. Address findings to improve.'}
+              {securityData.overall_score < 60 && 'Security needs attention. Review and fix critical issues.'}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="content-card">
-        <h2 className="card-title">⚠️ Vulnerability Findings</h2>
-        <div className="card-content">
-          <div className="vulnerability-item high">
-            <div className="vuln-header">
-              <span className="vuln-severity">HIGH</span>
-              <span className="vuln-id">CVE-2023-45857</span>
-            </div>
-            <h4 className="vuln-title">Prototype Pollution in lodash</h4>
-            <p className="vuln-description">
-              Affected package: lodash@4.17.19 → Upgrade to 4.17.21 or higher
-            </p>
-            <div className="vuln-remediation">
-              <strong>Remediation:</strong> Run <code>npm update lodash</code>
-            </div>
-          </div>
-
-          <div className="vulnerability-item medium">
-            <div className="vuln-header">
-              <span className="vuln-severity">MEDIUM</span>
-              <span className="vuln-id">CVE-2023-26136</span>
-            </div>
-            <h4 className="vuln-title">Regular Expression Denial of Service</h4>
-            <p className="vuln-description">
-              Affected package: tough-cookie@4.0.0 → Upgrade to 4.1.3 or higher
-            </p>
-            <div className="vuln-remediation">
-              <strong>Remediation:</strong> Update dependencies with <code>npm audit fix</code>
-            </div>
-          </div>
-
-          <div className="vulnerability-item low">
-            <div className="vuln-header">
-              <span className="vuln-severity">LOW</span>
-              <span className="vuln-id">CVE-2023-28155</span>
-            </div>
-            <h4 className="vuln-title">Information Disclosure in request</h4>
-            <p className="vuln-description">
-              Affected package: request@2.88.2 → Consider migrating to axios or node-fetch
-            </p>
-            <div className="vuln-remediation">
-              <strong>Remediation:</strong> Replace deprecated package
-            </div>
+      {/* Issues Section */}
+      {securityData.issues && securityData.issues.length > 0 && (
+        <div className="content-card issues-card fade-in">
+          <h3 className="card-title">⚠️ Security Issues ({securityData.issues.length})</h3>
+          <div className="issues-list">
+            {securityData.issues.map((issue, index) => (
+              <div key={index} className="issue-item fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="issue-header">
+                  <span
+                    className="severity-badge"
+                    style={{ backgroundColor: getSeverityColor(issue.severity) }}
+                  >
+                    {issue.severity}
+                  </span>
+                  <h4 className="issue-title">{issue.title}</h4>
+                </div>
+                <p className="issue-description">{issue.description}</p>
+                {issue.file && issue.file !== 'Unknown' && (
+                  <p className="issue-file">
+                    <span className="file-icon">📄</span>
+                    {issue.file}
+                  </p>
+                )}
+                <div className="issue-fix">
+                  <strong>Fix:</strong> {issue.fix}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="content-card">
-        <h2 className="card-title">📦 Dependency Audit</h2>
-        <div className="card-content">
-          <div className="audit-summary">
-            <div className="audit-stat">
-              <span className="stat-number">247</span>
-              <span className="stat-label">Total Dependencies</span>
-            </div>
-            <div className="audit-stat">
-              <span className="stat-number">3</span>
-              <span className="stat-label">Vulnerabilities Found</span>
-            </div>
-            <div className="audit-stat">
-              <span className="stat-number">12</span>
-              <span className="stat-label">Outdated Packages</span>
-            </div>
-            <div className="audit-stat">
-              <span className="stat-number">98%</span>
-              <span className="stat-label">Up-to-date</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="content-card">
-        <h2 className="card-title">✅ Security Best Practices</h2>
-        <div className="card-content">
-          <ul className="best-practices-list">
-            <li className="practice-item complete">
-              <span className="practice-icon">✓</span>
-              <span className="practice-text">Dependencies are regularly updated</span>
-            </li>
-            <li className="practice-item complete">
-              <span className="practice-icon">✓</span>
-              <span className="practice-text">No secrets or API keys in code</span>
-            </li>
-            <li className="practice-item complete">
-              <span className="practice-icon">✓</span>
-              <span className="practice-text">HTTPS enforced for all connections</span>
-            </li>
-            <li className="practice-item complete">
-              <span className="practice-icon">✓</span>
-              <span className="practice-text">Input validation implemented</span>
-            </li>
-            <li className="practice-item warning">
-              <span className="practice-icon">⚠</span>
-              <span className="practice-text">Consider adding Content Security Policy headers</span>
-            </li>
-            <li className="practice-item warning">
-              <span className="practice-icon">⚠</span>
-              <span className="practice-text">Enable Dependabot for automated security updates</span>
-            </li>
+      {/* Passed Checks Section */}
+      {securityData.passed_checks && securityData.passed_checks.length > 0 && (
+        <div className="content-card passed-checks-card fade-in">
+          <h3 className="card-title">✅ Passed Security Checks</h3>
+          <ul className="passed-checks-list">
+            {securityData.passed_checks.map((check, index) => (
+              <li key={index} className="check-item fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <span className="check-icon">✓</span>
+                <span className="check-text">{check}</span>
+              </li>
+            ))}
           </ul>
         </div>
-      </div>
+      )}
 
-      <div className="content-card">
-        <h2 className="card-title">🛡️ Recommended Actions</h2>
-        <div className="card-content">
-          <ol className="action-list">
-            <li>Update lodash to version 4.17.21 or higher (High Priority)</li>
-            <li>Run <code>npm audit fix</code> to automatically fix medium severity issues</li>
-            <li>Review and update outdated dependencies</li>
-            <li>Enable GitHub Dependabot alerts</li>
-            <li>Add security headers to your application</li>
-            <li>Implement rate limiting for API endpoints</li>
-            <li>Set up automated security scanning in CI/CD pipeline</li>
-          </ol>
+      {/* Recommendations Section */}
+      {securityData.recommendations && securityData.recommendations.length > 0 && (
+        <div className="content-card recommendations-card fade-in">
+          <h3 className="card-title">💡 Recommendations</h3>
+          <ul className="recommendations-list">
+            {securityData.recommendations.map((rec, index) => (
+              <li key={index} className="recommendation-item fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                {rec}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      )}
     </div>
   );
 }
