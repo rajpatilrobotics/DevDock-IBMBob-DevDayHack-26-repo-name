@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "cors": "^2.8.6",
+    "dagre": "^0.8.5",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mermaid": "^11.14.0",

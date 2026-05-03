@@ -58,7 +58,7 @@ export async function generateText(prompt, options = {}) {
 
     if (error.message.includes('Failed to fetch')) {
       throw new Error(
-        'Cannot connect to backend server. Make sure the server is running on port 5000.'
+        'Cannot connect to backend server. Make sure the server is running on port 5001.'
       );
     }
 

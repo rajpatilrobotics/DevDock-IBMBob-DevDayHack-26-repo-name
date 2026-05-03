@@ -8,6 +8,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { FunctionCallFlowDiagram, FileStructureDiagram, DataFlowFromCodeDiagram } from './CodeAnalysisDiagrams';
+import DynamicDataFlowDiagram from './DynamicDataFlowDiagram';
 
 // Architecture Analysis Display Component with Enhanced Typography
 function ArchitectureAnalysisDisplay({ analysis }) {
@@ -1901,8 +1902,10 @@ function Architecture({ repoData, architectureAnalysis, isArchitectureLoading, a
         </div>
       </div>
 
-      {/* Data Flow Diagram - Shows actual data flow through detected technologies */}
-      {techStack && (Object.values(techStack).some(arr => arr.length > 0)) && <DataFlowDiagram techStack={techStack} detailedArchitecture={detailedArchitecture} />}
+      {/* Dynamic Data Flow Diagram - Shows REAL data flow extracted from code */}
+      {codeAnalysis && codeAnalysis.files && codeAnalysis.files.length > 0 && (
+        <DynamicDataFlowDiagram codeAnalysis={codeAnalysis} />
+      )}
 
       {/* Unified Comprehensive Technology Stack Visualization */}
       {techStack && (Object.values(techStack).some(arr => arr.length > 0)) && <UnifiedTechStackDiagram techStack={techStack} />}

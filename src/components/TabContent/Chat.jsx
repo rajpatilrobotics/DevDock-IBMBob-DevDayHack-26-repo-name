@@ -311,9 +311,9 @@ function Chat({ repoData, codeAnalysis, isCodeAnalysisLoading }) {
 
   // Build System Prompt - Exact format as specified in task requirements
   const buildStructuredPrompt = (userQuestion, intent, context, chatHistory) => {
-    // Build key files list
+    // Build key files list with actual file names
     const filesList = context.key_files
-      .map((f, idx) => `{file_${idx + 1}}: ${f.purpose}`)
+      .map((f) => `${f.name}: ${f.purpose}`)
       .join('\n');
     
     // Get last 3 messages (6 total - 3 exchanges) for chat history
@@ -328,7 +328,7 @@ Your job is to answer questions about this codebase accurately and helpfully.
 STRICT RULES:
 - Answer ONLY based on the repository context provided
 - Do NOT hallucinate features, files, or logic
-- If information is missing, say: "Not enough information in the repository"
+- If information is missing, say: Not enough information in the repository
 - Keep answers concise (max 120 words)
 - Reference file names, folders, or components when possible
 - Prefer practical explanations over theory
