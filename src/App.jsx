@@ -7,6 +7,7 @@ import TabNavigation from './components/TabNavigation';
 import TimeSavedBadge from './components/TimeSavedBadge';
 import DownloadPDFButton from './components/DownloadPDFButton';
 import Footer from './components/Footer';
+import { jsPDF } from 'jspdf';
 
 // Tab Content Components
 import Summary from './components/TabContent/Summary';
@@ -51,6 +52,7 @@ function App() {
   const [codeAnalysis, setCodeAnalysis] = useState(null);
   const [isCodeAnalysisLoading, setIsCodeAnalysisLoading] = useState(false);
   const [codeAnalysisError, setCodeAnalysisError] = useState(null);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const resultsRef = useRef(null);
 
   const tabs = [
@@ -428,7 +430,457 @@ Keep response structured, concise, and easy to scan using bullet points.`;
   };
 
   const handleDownloadPDF = () => {
-    alert('PDF Report download would start here (UI only - no backend)');
+    if (!repoData) {
+      alert('No repository data available to export');
+      return;
+    }
+
+    console.log('=== PDF GENERATION DEBUG ===');
+    console.log('codeAnalysis:', codeAnalysis);
+    console.log('codeAnalysis.security:', codeAnalysis?.security);
+    
+    // Check sessionStorage
+    const cachedSecurity = sessionStorage.getItem('securityScanCache');
+    console.log('sessionStorage securityScanCache:', cachedSecurity);
+    if (cachedSecurity) {
+      try {
+        const parsed = JSON.parse(cachedSecurity);
+        console.log('Parsed security data:', parsed);
+      } catch (e) {
+        console.error('Failed to parse cached security:', e);
+      }
+    }
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    const maxWidth = pageWidth - 2 * margin;
+    let y = margin;
+
+    const addPageHeader = (sectionName) => {
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(`DevDock AI Report - ${repoData.repoInfo.name}`, margin, 10);
+      pdf.text(sectionName, pageWidth - margin, 10, { align: 'right' });
+      pdf.setTextColor(0, 0, 0);
+      y = margin + 5;
+    };
+
+    const addMainTitle = (text) => {
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(47, 129, 247);
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      lines.forEach(line => {
+        pdf.text(line, margin, y);
+        y += 10;
+      });
+      pdf.setTextColor(0, 0, 0);
+      y += 5;
+    };
+
+    const addSectionTitle = (text) => {
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(47, 129, 247);
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      lines.forEach(line => {
+        pdf.text(line, margin, y);
+        y += 8;
+      });
+      pdf.setTextColor(0, 0, 0);
+      
+      // Add underline
+      pdf.setDrawColor(47, 129, 247);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, y, margin + 60, y);
+      y += 8;
+    };
+
+    const addSubtitle = (text) => {
+      checkPageBreak(15);
+      pdf.setFontSize(13);
+      pdf.setFont('helvetica', 'bold');
+      pdf.setTextColor(0, 0, 0);
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      lines.forEach(line => {
+        pdf.text(line, margin, y);
+        y += 7;
+      });
+      y += 2;
+    };
+
+    const addText = (text, indent = 0) => {
+      if (!text || text === 'No README found') return;
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(0, 0, 0);
+      const lines = pdf.splitTextToSize(String(text), maxWidth - indent);
+      lines.forEach(line => {
+        checkPageBreak(7);
+        pdf.text(line, margin + indent, y);
+        y += 6;
+      });
+    };
+
+    const addBullet = (text) => {
+      checkPageBreak(7);
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('•', margin + 2, y);
+      const lines = pdf.splitTextToSize(String(text), maxWidth - 8);
+      lines.forEach((line, index) => {
+        if (index > 0) checkPageBreak(7);
+        pdf.text(line, margin + 8, y);
+        y += 6;
+      });
+    };
+
+    const addSpace = (size = 5) => {
+      y += size;
+    };
+
+    const addDivider = () => {
+      checkPageBreak(5);
+      pdf.setDrawColor(200, 200, 200);
+      pdf.setLineWidth(0.3);
+      pdf.line(margin, y, pageWidth - margin, y);
+      y += 5;
+    };
+
+    const checkPageBreak = (requiredSpace = 10) => {
+      if (y + requiredSpace > pageHeight - 20) {
+        pdf.addPage();
+        y = margin;
+      }
+    };
+
+    const startNewSection = (sectionName) => {
+      pdf.addPage();
+      y = margin;
+      addPageHeader(sectionName);
+      addSpace(10);
+    };
+
+    // ========== COVER PAGE ==========
+    y = pageHeight / 3;
+    pdf.setFontSize(28);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(47, 129, 247);
+    pdf.text('DevDock AI Report', pageWidth / 2, y, { align: 'center' });
+    
+    y += 15;
+    pdf.setFontSize(18);
+    pdf.setTextColor(0, 0, 0);
+    const repoNameLines = pdf.splitTextToSize(repoData.repoInfo.name, maxWidth);
+    repoNameLines.forEach(line => {
+      pdf.text(line, pageWidth / 2, y, { align: 'center' });
+      y += 10;
+    });
+    
+    y += 20;
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(100, 100, 100);
+    pdf.text(`Generated on ${new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })}`, pageWidth / 2, y, { align: 'center' });
+
+    // ========== SUMMARY SECTION ==========
+    startNewSection('Summary');
+    addSectionTitle('SUMMARY');
+    addSpace(5);
+
+    addSubtitle('Repository Information');
+    addText(`Description: ${repoData.repoInfo.description || 'N/A'}`);
+    addText(`Primary Language: ${repoData.repoInfo.language || 'N/A'}`);
+    addText(`Stars: ${repoData.repoInfo.stars || 0}`);
+    addText(`License: ${repoData.repoInfo.license || 'N/A'}`);
+    addText(`Last Updated: ${new Date(repoData.repoInfo.updatedAt).toLocaleDateString()}`);
+    addSpace(8);
+
+    if (aiSummary) {
+      addSubtitle('AI-Generated Summary');
+      addText(aiSummary);
+      addSpace(8);
+    }
+
+    if (repoData.techStack && Object.keys(repoData.techStack).length > 0) {
+      addSubtitle('Technology Stack');
+      Object.entries(repoData.techStack).forEach(([category, items]) => {
+        if (items && items.length > 0) {
+          pdf.setFont('helvetica', 'bold');
+          addText(`${category}:`);
+          pdf.setFont('helvetica', 'normal');
+          items.forEach(item => addBullet(item));
+          addSpace(3);
+        }
+      });
+      addSpace(5);
+    }
+
+    if (repoData.complexity) {
+      addSubtitle('Project Complexity');
+      addText(`Complexity Level: ${repoData.complexity.level}`);
+      addText(`Complexity Score: ${repoData.complexity.score}/100`);
+      addText(`Traditional Onboarding Time: ${repoData.complexity.traditionalTime}`);
+      addText(`DevDock Onboarding Time: ${repoData.complexity.devdockTime}`);
+      addSpace(5);
+    }
+
+    // ========== ARCHITECTURE SECTION ==========
+    startNewSection('Architecture');
+    addSectionTitle('ARCHITECTURE');
+    addSpace(5);
+
+    if (architectureAnalysis) {
+      addSubtitle('Architecture Analysis');
+      addText(architectureAnalysis);
+      addSpace(8);
+    }
+
+    if (repoData.fileTree && repoData.fileTree.length > 0) {
+      addSubtitle('Project Structure');
+      addText(`Total Files: ${repoData.fileTree.length}`);
+      addSpace(5);
+    }
+
+    if (repoData.importantFiles && repoData.importantFiles.length > 0) {
+      addSubtitle('Key Files');
+      repoData.importantFiles.forEach(file => {
+        addBullet(file.path);
+        if (file.type) {
+          addText(`Type: ${file.type}`, 10);
+        }
+      });
+      addSpace(8);
+    }
+
+    if (detailedArchitecture) {
+      addSubtitle('Detailed Architecture');
+      if (detailedArchitecture.layers) {
+        addText('Architecture Layers:');
+        Object.entries(detailedArchitecture.layers).forEach(([layer, files]) => {
+          addText(`${layer}: ${files.length} files`, 5);
+        });
+        addSpace(5);
+      }
+      if (detailedArchitecture.patterns && Array.isArray(detailedArchitecture.patterns)) {
+        addText('Design Patterns:');
+        detailedArchitecture.patterns.forEach(pattern => addBullet(pattern));
+        addSpace(5);
+      }
+    }
+
+    if (codeAnalysis && codeAnalysis.structure) {
+      addSubtitle('Code Structure Analysis');
+      if (codeAnalysis.structure.components) {
+        addText(`Components: ${codeAnalysis.structure.components}`);
+      }
+      if (codeAnalysis.structure.services) {
+        addText(`Services: ${codeAnalysis.structure.services}`);
+      }
+      if (codeAnalysis.structure.utilities) {
+        addText(`Utilities: ${codeAnalysis.structure.utilities}`);
+      }
+      addSpace(5);
+    }
+
+    // ========== ONBOARDING GUIDE SECTION ==========
+    startNewSection('Onboarding Guide');
+    addSectionTitle('ONBOARDING GUIDE');
+    addSpace(5);
+
+    if (quickStartGuide) {
+      addSubtitle('Quick Start Guide');
+      addText(quickStartGuide);
+      addSpace(8);
+    }
+
+    if (commonIssues) {
+      addSubtitle('Common Issues & Solutions');
+      addText(commonIssues);
+      addSpace(8);
+    }
+
+    if (firstContributions && firstContributions.length > 0) {
+      addSubtitle('First Contribution Suggestions');
+      firstContributions.forEach((contrib, index) => {
+        checkPageBreak(25);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`${index + 1}. ${contrib.task}`, margin, y);
+        y += 6;
+        pdf.setFont('helvetica', 'normal');
+        addText(`File: ${contrib.file}`, 5);
+        addText(`Difficulty: ${contrib.difficulty}`, 5);
+        addText(`Impact: ${contrib.impact}`, 5);
+        addSpace(5);
+        addDivider();
+      });
+    }
+
+    if (repoData.envVariables && repoData.envVariables.length > 0) {
+      addSubtitle('Environment Variables');
+      repoData.envVariables.forEach(env => addBullet(env));
+      addSpace(8);
+    }
+
+    if (repoData.keyCommands && repoData.keyCommands.length > 0) {
+      addSubtitle('Key Commands');
+      repoData.keyCommands.forEach(cmd => addBullet(cmd));
+      addSpace(5);
+    }
+
+    // ========== DOCUMENTATION SECTION ==========
+    if (repoData.readme && repoData.readme !== 'No README found') {
+      startNewSection('Documentation');
+      addSectionTitle('DOCUMENTATION');
+      addSpace(5);
+      addSubtitle('README');
+      addText(repoData.readme);
+    }
+
+    // ========== SECURITY SCANNER SECTION ==========
+    // Try to get security data from sessionStorage if not in codeAnalysis
+    let securityData = codeAnalysis?.security;
+    console.log('Security data from codeAnalysis:', securityData);
+    
+    if (!securityData) {
+      try {
+        const cached = sessionStorage.getItem('securityScanCache');
+        console.log('Attempting to retrieve from sessionStorage:', cached);
+        if (cached) {
+          securityData = JSON.parse(cached);
+          console.log('Successfully parsed security data from cache:', securityData);
+        }
+      } catch (err) {
+        console.error('Failed to parse security cache:', err);
+      }
+    }
+
+    console.log('Final security data for PDF:', securityData);
+
+    // ALWAYS add security section, even if no data
+    startNewSection('Security Scanner');
+    addSectionTitle('SECURITY SCANNER');
+    addSpace(5);
+
+    if (securityData) {
+      addSubtitle('Security Overview');
+      addText(`Overall Security Score: ${securityData.score || securityData.overall_score || 'N/A'}/100`);
+      addText(`Risk Level: ${securityData.riskLevel || securityData.risk_level || 'N/A'}`);
+      addSpace(8);
+
+      // Passed Security Checks
+      if (securityData.passed_checks && securityData.passed_checks.length > 0) {
+        addSubtitle(`Passed Security Checks (${securityData.passed_checks.length})`);
+        addSpace(3);
+        securityData.passed_checks.forEach(check => {
+          checkPageBreak(10);
+          pdf.setTextColor(40, 167, 69);
+          pdf.text('✓', margin, y);
+          pdf.setTextColor(0, 0, 0);
+          addText(check, 8);
+        });
+        addSpace(8);
+      }
+
+      // Security Issues
+      if (securityData.issues && securityData.issues.length > 0) {
+        addSubtitle(`Security Issues Found (${securityData.issues.length})`);
+        addSpace(3);
+        
+        securityData.issues.forEach((issue, index) => {
+          checkPageBreak(35);
+          
+          // Issue number and title
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(12);
+          pdf.text(`${index + 1}. ${issue.title}`, margin, y);
+          y += 6;
+          
+          // Severity badge
+          pdf.setFontSize(10);
+          const severityLower = (issue.severity || '').toLowerCase();
+          const severityColor = severityLower === 'high' ? [220, 53, 69] :
+                               severityLower === 'medium' ? [255, 193, 7] : [40, 167, 69];
+          pdf.setTextColor(...severityColor);
+          pdf.text(`[${(issue.severity || 'UNKNOWN').toUpperCase()}]`, margin, y);
+          pdf.setTextColor(0, 0, 0);
+          y += 7;
+          
+          // Description
+          pdf.setFont('helvetica', 'normal');
+          pdf.setFontSize(11);
+          if (issue.description) {
+            pdf.setFont('helvetica', 'bold');
+            addText('Description:', 5);
+            pdf.setFont('helvetica', 'normal');
+            addText(issue.description, 5);
+          }
+          
+          // File location
+          if (issue.file) {
+            pdf.setFont('helvetica', 'bold');
+            addText('File:', 5);
+            pdf.setFont('helvetica', 'normal');
+            addText(issue.file, 5);
+          }
+          
+          // Fix recommendation
+          if (issue.fix) {
+            pdf.setFont('helvetica', 'bold');
+            addText('Recommended Fix:', 5);
+            pdf.setFont('helvetica', 'normal');
+            addText(issue.fix, 5);
+          }
+          
+          addSpace(5);
+          addDivider();
+        });
+      } else {
+        addText('No security issues detected.');
+        addSpace(8);
+      }
+
+      // Security Recommendations
+      if (securityData.recommendations && securityData.recommendations.length > 0) {
+        addSubtitle(`Security Recommendations (${securityData.recommendations.length})`);
+        addSpace(3);
+        securityData.recommendations.forEach((rec, index) => {
+          checkPageBreak(10);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text(`${index + 1}.`, margin, y);
+          pdf.setFont('helvetica', 'normal');
+          addText(rec, 8);
+          addSpace(3);
+        });
+      }
+
+      // Additional Security Metrics
+      if (securityData.metrics) {
+        addSpace(8);
+        addSubtitle('Security Metrics');
+        Object.entries(securityData.metrics).forEach(([key, value]) => {
+          addText(`${key}: ${value}`);
+        });
+      }
+    } else {
+      // If no security data at all, add a note
+      addText('No security scan data available. Please visit the Security Scanner tab to run a scan.');
+      addSpace(5);
+      pdf.setTextColor(100, 100, 100);
+      pdf.setFontSize(10);
+      addText('Tip: The security scan analyzes your repository for vulnerabilities and security best practices.');
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(11);
+    }
+
+    pdf.save('DevDock_Report.pdf');
   };
 
   const renderTabContent = () => {
@@ -581,6 +1033,7 @@ Keep response structured, concise, and easy to scan using bullet points.`;
                 <DownloadPDFButton
                   isVisible={analysisComplete}
                   onClick={handleDownloadPDF}
+                  isGenerating={isGeneratingPDF}
                 />
               </div>
 

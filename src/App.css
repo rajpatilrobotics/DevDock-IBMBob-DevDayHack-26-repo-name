@@ -4171,3 +4171,438 @@
   font-style: italic;
   margin-top: var(--spacing-sm);
 }
+
+
+/* ===================================
+   PDF Export Styles
+   =================================== */
+
+/* PDF Container - Base Styles */
+.pdf-export-container {
+  background: white !important;
+  color: #000 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+  width: 210mm;
+  box-sizing: border-box;
+}
+
+/* Remove all animations and transitions in PDF */
+.pdf-export-container * {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Content Cards in PDF */
+.pdf-export-container .content-card {
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .card-content {
+  background: white !important;
+  color: #000 !important;
+}
+
+/* Card Titles */
+.pdf-export-container .card-title {
+  color: #2f81f7 !important;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #2f81f7;
+  padding-bottom: 10px;
+  page-break-after: avoid;
+}
+
+/* Hide Interactive Elements */
+.pdf-export-container button,
+.pdf-export-container input,
+.pdf-export-container textarea,
+.pdf-export-container .tab-navigation,
+.pdf-export-container .download-pdf-btn,
+.pdf-export-container .retry-button,
+.pdf-export-container .quick-action-btn {
+  display: none !important;
+}
+
+/* Section Styling */
+.pdf-section {
+  page-break-before: auto;
+  page-break-after: auto;
+  page-break-inside: avoid;
+  margin-bottom: 30px;
+}
+
+.pdf-section h2 {
+  page-break-after: avoid;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #2f81f7;
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 2px solid #2f81f7;
+  padding-bottom: 10px;
+}
+
+/* Code Blocks */
+.pdf-export-container pre,
+.pdf-export-container code {
+  background: #f5f5f5 !important;
+  color: #000 !important;
+  border: 1px solid #ddd !important;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+  page-break-inside: avoid;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.pdf-export-container .code-snippet {
+  background: #f5f5f5 !important;
+  border: 1px solid #ddd !important;
+  page-break-inside: avoid;
+}
+
+/* Tables */
+.pdf-export-container table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 15px 0;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container th,
+.pdf-export-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  color: #000 !important;
+}
+
+.pdf-export-container th {
+  background-color: #f5f5f5 !important;
+  font-weight: bold;
+}
+
+/* Lists */
+.pdf-export-container ul,
+.pdf-export-container ol {
+  margin: 10px 0;
+  padding-left: 30px;
+  color: #000 !important;
+}
+
+.pdf-export-container li {
+  margin: 5px 0;
+  color: #000 !important;
+}
+
+/* Links */
+.pdf-export-container a {
+  color: #2f81f7 !important;
+  text-decoration: underline;
+}
+
+/* Badges and Labels */
+.pdf-export-container .language-badge,
+.pdf-export-container .language-badge-small,
+.pdf-export-container .tech-badge,
+.pdf-export-container .severity-badge {
+  background: #f0f0f0 !important;
+  color: #000 !important;
+  border: 1px solid #ddd !important;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Stats and Metrics */
+.pdf-export-container .stat-value,
+.pdf-export-container .info-value {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+.pdf-export-container .stat-label,
+.pdf-export-container .info-label {
+  color: #666 !important;
+}
+
+/* Complexity Indicators */
+.pdf-export-container .complexity-circle {
+  border: 3px solid #ddd !important;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .complexity-level,
+.pdf-export-container .complexity-score {
+  color: #000 !important;
+}
+
+/* Security Scan Results */
+.pdf-export-container .vulnerability-item {
+  background: white !important;
+  border: 1px solid #ddd !important;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .severity-high {
+  color: #d32f2f !important;
+}
+
+.pdf-export-container .severity-medium {
+  color: #f57c00 !important;
+}
+
+.pdf-export-container .severity-low {
+  color: #388e3c !important;
+}
+
+/* Architecture Diagrams */
+.pdf-export-container .architecture-diagram,
+.pdf-export-container .diagram-container {
+  background: white !important;
+  border: 1px solid #ddd !important;
+  page-break-inside: avoid;
+}
+
+/* Flow Diagrams */
+.pdf-export-container .react-flow,
+.pdf-export-container .reactflow-wrapper {
+  background: white !important;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .react-flow__node {
+  background: white !important;
+  border: 2px solid #2f81f7 !important;
+  color: #000 !important;
+}
+
+/* Chat Messages (if included) */
+.pdf-export-container .chat-message {
+  background: #f9f9f9 !important;
+  border: 1px solid #ddd !important;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  page-break-inside: avoid;
+}
+
+.pdf-export-container .user-message {
+  background: #e3f2fd !important;
+  border-left: 3px solid #2f81f7 !important;
+}
+
+.pdf-export-container .bot-message {
+  background: #f5f5f5 !important;
+  border-left: 3px solid #666 !important;
+}
+
+.pdf-export-container .message-text {
+  color: #000 !important;
+}
+
+/* Ensure proper text rendering */
+.pdf-export-container p,
+.pdf-export-container span,
+.pdf-export-container div {
+  color: #000 !important;
+}
+
+.pdf-export-container h1,
+.pdf-export-container h2,
+.pdf-export-container h3,
+.pdf-export-container h4,
+.pdf-export-container h5,
+.pdf-export-container h6 {
+  color: #2f81f7 !important;
+  page-break-after: avoid;
+}
+
+/* Grid Layouts */
+.pdf-export-container .repo-stats-grid,
+.pdf-export-container .tech-stack-grid {
+  display: block;
+}
+
+.pdf-export-container .stat-row {
+  margin: 8px 0;
+  page-break-inside: avoid;
+}
+
+/* Remove Gradients */
+.pdf-export-container [style*="gradient"] {
+  background: white !important;
+}
+
+/* Ensure Readability */
+.pdf-export-container {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+/* Page Break Helpers */
+.page-break-before {
+  page-break-before: always;
+}
+
+.page-break-after {
+  page-break-after: always;
+}
+
+.no-page-break {
+  page-break-inside: avoid;
+}
+
+/* Made with Bob */
+
+
+/* ===================================
+   Print/PDF Styles
+   =================================== */
+
+@media print {
+  /* Hide everything except results */
+  .header,
+  .input-section,
+  .empty-state,
+  .message-banner,
+  .loading-overlay,
+  .footer,
+  .results-header,
+  .tab-navigation,
+  button,
+  input,
+  textarea {
+    display: none !important;
+  }
+
+  /* Show only results content */
+  .results-section {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .tab-content-wrapper {
+    display: block !important;
+  }
+
+  /* Reset colors for print */
+  body {
+    background: white !important;
+    color: #000 !important;
+  }
+
+  .app {
+    background: white !important;
+  }
+
+  /* Content cards */
+  .content-card {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    color: #2f81f7 !important;
+    border-bottom: 2px solid #2f81f7 !important;
+  }
+
+  /* Text colors */
+  * {
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #2f81f7 !important;
+    page-break-after: avoid;
+  }
+
+  /* Code blocks */
+  pre, code {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+
+  /* Remove animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Page breaks */
+  .content-card {
+    page-break-inside: avoid;
+  }
+
+  /* PDF Print Header */
+  .pdf-print-header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #2f81f7;
+    page-break-after: avoid;
+  }
+
+  .pdf-print-header h1 {
+    margin: 0;
+    font-size: 32px;
+    color: #2f81f7 !important;
+  }
+
+  .pdf-print-header h2 {
+    margin: 10px 0;
+    font-size: 20px;
+    color: #666 !important;
+  }
+
+  .pdf-print-header p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #999 !important;
+  }
+}
+
+/* Print header (hidden by default) */
+.pdf-print-header {
+  display: none;
+}
+
+/* When printing PDF */
+body.printing-pdf {
+  overflow: visible !important;
+}
+
+body.printing-pdf .header,
+body.printing-pdf .input-section,
+body.printing-pdf .empty-state,
+body.printing-pdf .message-banner,
+body.printing-pdf .loading-overlay,
+body.printing-pdf .footer {
+  display: none !important;
+}
+
+body.printing-pdf .pdf-print-header {
+  display: block !important;
+}
+
+/* Made with Bob */
