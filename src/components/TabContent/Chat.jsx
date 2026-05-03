@@ -674,7 +674,7 @@ RESPONSE FORMAT:
                   </div>
                   <div className="message-content">
                     <div className="typing-indicator">
-                      <span className="typing-text">AI is typing</span>
+                      <span className="typing-text">Analyzing with watsonx AI</span>
                       <span className="typing-dot"></span>
                       <span className="typing-dot"></span>
                       <span className="typing-dot"></span>

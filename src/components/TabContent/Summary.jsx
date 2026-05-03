@@ -128,7 +128,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isSummaryLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Generating AI summary with watsonx.ai...</p>
+              <p>Generating insights using watsonx AI...</p>
             </div>
           )}
           
@@ -219,7 +219,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isQuickStartLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Generating quick start guide...</p>
+              <p>Generating guide using watsonx AI...</p>
             </div>
           )}
           
@@ -344,7 +344,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isIssuesLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Analyzing common issues...</p>
+              <p>Analyzing common issues with watsonx AI...</p>
             </div>
           )}
           
@@ -367,7 +367,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isContributionsLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Analyzing codebase for beginner-friendly tasks...</p>
+              <p>Analyzing codebase using watsonx AI...</p>
             </div>
           )}
           
@@ -407,7 +407,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           <div className="contribution-note">
             <span className="note-icon">⚡</span>
             <span className="note-text">
-              These AI-generated suggestions help you make your first impact in minutes, not days!
+              watsonx AI insights help you make your first impact in minutes, not days!
             </span>
           </div>
         </div>

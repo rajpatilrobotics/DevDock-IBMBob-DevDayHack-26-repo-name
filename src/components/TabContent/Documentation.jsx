@@ -97,7 +97,7 @@ function Documentation({ repoData, codeAnalysis }) {
           <h2 className="card-title">📚 API Endpoints</h2>
           <div className="card-content">
             <p className="text-secondary" style={{ marginBottom: '15px' }}>
-              Detected API endpoints from code analysis:
+              API endpoints detected from code analysis:
             </p>
             {apiRoutes.map((route, index) => (
               <div key={index} className="api-section" style={{ marginBottom: '20px' }}>
@@ -133,7 +133,7 @@ function Documentation({ repoData, codeAnalysis }) {
           <h2 className="card-title">💡 Key Functions</h2>
           <div className="card-content">
             <p className="text-secondary" style={{ marginBottom: '15px' }}>
-              Important functions detected in the codebase:
+              Key functions identified in the codebase:
             </p>
             {keyFunctions.map((func, index) => {
               const code = getFunctionCode(func);
@@ -168,7 +168,7 @@ function Documentation({ repoData, codeAnalysis }) {
           <h2 className="card-title">🔧 Environment Variables</h2>
           <div className="card-content">
             <p className="text-secondary" style={{ marginBottom: '15px' }}>
-              Environment variables detected in the code:
+              Environment variables found in the code:
             </p>
             <table className="config-table">
               <thead>
@@ -196,7 +196,7 @@ function Documentation({ repoData, codeAnalysis }) {
           <h2 className="card-title">🛠️ Tech Stack</h2>
           <div className="card-content">
             <p className="text-secondary" style={{ marginBottom: '15px' }}>
-              Technologies and frameworks detected:
+              Technologies and frameworks identified:
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
               {codeAnalysis.summary.frameworks.map((framework, index) => (
@@ -258,7 +258,7 @@ function Documentation({ repoData, codeAnalysis }) {
           <h2 className="card-title">📚 Documentation</h2>
           <div className="card-content">
             <p className="text-secondary">
-              Code analysis is in progress. Documentation will be generated from actual code analysis once complete.
+              Documentation will be generated using watsonx AI once code analysis is complete.
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import './components/Homepage/Homepage.css';
 import Header from './components/Header';
 import InputSection from './components/InputSection';
 import LoadingSpinner from './components/LoadingSpinner';
@@ -8,6 +9,15 @@ import TimeSavedBadge from './components/TimeSavedBadge';
 import DownloadPDFButton from './components/DownloadPDFButton';
 import Footer from './components/Footer';
 import { jsPDF } from 'jspdf';
+
+// Homepage Components
+import HeroSection from './components/Homepage/HeroSection';
+import ImpactComparison from './components/Homepage/ImpactComparison';
+import PoweredByBob from './components/Homepage/PoweredByBob';
+import HowItWorks from './components/Homepage/HowItWorks';
+import ProductivityHighlight from './components/Homepage/ProductivityHighlight';
+import FeaturesGrid from './components/Homepage/FeaturesGrid';
+import CTASection from './components/Homepage/CTASection';
 
 // Tab Content Components
 import Summary from './components/TabContent/Summary';
@@ -984,42 +994,21 @@ Keep response structured, concise, and easy to scan using bullet points.`;
       <main className="main-content">
         <div className="single-column">
           {!analysisComplete && !isAnalyzing && (
-            <div className="empty-state">
-              <div className="empty-state-icon">🚢</div>
-              <h2 className="empty-state-title">Understand Any Codebase in Minutes</h2>
-              <p className="empty-state-subtitle">
-                Paste a GitHub repository URL and get instant AI-powered insights
-              </p>
-              <div className="empty-state-features">
-                <div className="feature-item">
-                  <span className="feature-icon">⚡</span>
-                  <span className="feature-text">AI-powered analysis</span>
-                </div>
-                <div className="feature-item">
-                  <span className="feature-icon">📚</span>
-                  <span className="feature-text">Interactive onboarding</span>
-                </div>
-                <div className="feature-item">
-                  <span className="feature-icon">🔒</span>
-                  <span className="feature-text">Security scanning</span>
-                </div>
-                <div className="feature-item">
-                  <span className="feature-icon">💬</span>
-                  <span className="feature-text">Live chat support</span>
-                </div>
-              </div>
-              <p className="empty-state-cta">👇 Get Started Below</p>
-            </div>
+            <>
+              <HeroSection
+                repoUrl={repoUrl}
+                onUrlChange={setRepoUrl}
+                onAnalyze={handleAnalyze}
+                isAnalyzing={isAnalyzing}
+              />
+              <ImpactComparison />
+              <PoweredByBob />
+              <HowItWorks />
+              <ProductivityHighlight />
+              <FeaturesGrid />
+              <CTASection />
+            </>
           )}
-
-          <InputSection
-            repoUrl={repoUrl}
-            onUrlChange={setRepoUrl}
-            onAnalyze={handleAnalyze}
-            onQuickOnboard={handleQuickOnboard}
-            isAnalyzing={isAnalyzing}
-            disabled={isAnalyzing}
-          />
 
           {/* Success Message Banner */}
           {successMessage && (

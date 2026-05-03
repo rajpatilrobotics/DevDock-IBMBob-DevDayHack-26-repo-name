@@ -5,9 +5,9 @@ function LoadingSpinner({ isVisible }) {
   const [currentStage, setCurrentStage] = useState(0);
 
   const stages = [
-    { message: 'Analyzing repository...', subtext: 'Scanning files and structure' },
+    { message: 'Analyzing repository with watsonx AI...', subtext: 'Scanning files and structure' },
     { message: 'Understanding architecture...', subtext: 'Mapping components and dependencies' },
-    { message: 'Generating onboarding guide...', subtext: 'Creating personalized documentation' }
+    { message: 'Generating insights using IBM watsonx...', subtext: 'Creating personalized documentation' }
   ];
 
   useEffect(() => {

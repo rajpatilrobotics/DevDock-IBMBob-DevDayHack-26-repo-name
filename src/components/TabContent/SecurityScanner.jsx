@@ -217,7 +217,7 @@ Total Files: ${fileTree?.length || 0}
           <div className="scanning-state">
             <div className="scanning-spinner"></div>
             <h3>Scanning for vulnerabilities...</h3>
-            <p>Analyzing repository security with AI</p>
+            <p>Analyzing repository security using watsonx AI</p>
           </div>
         </div>
       </div>
