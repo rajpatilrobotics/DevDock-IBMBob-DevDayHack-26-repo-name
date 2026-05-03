@@ -4,15 +4,14 @@ function Header() {
   return (
     <header className="header">
       <div className="header-content">
-        <h1 className="logo">
+        <div className="logo">
           <img
-            src="/devdock-logo.png"
-            alt="DevDock Logo"
+            src="/devdock-logo-horizontal.svg"
+            alt="DevDock"
             className="logo-image"
-            style={{ height: '40px', marginRight: '10px' }}
+            style={{ height: '50px', width: 'auto' }}
           />
-          DevDock
-        </h1>
+        </div>
         <p className="tagline">AI-Powered Code Analysis & Onboarding Platform</p>
       </div>
     </header>

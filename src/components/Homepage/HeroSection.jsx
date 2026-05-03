@@ -34,16 +34,17 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
   return (
     <section className="hero-section">
       <div className="hero-content">
-        <h1 className="hero-title">
-          <span className="devdock-brand">
-            <span className="devdock-dev">Dev</span>
-            <span className="devdock-dock">Dock</span>
-          </span>
-        </h1>
-        <h2 className="hero-subtitle">
+        <div className="hero-logo-container">
+          <img
+            src="/devdock-logo-horizontal.svg"
+            alt="DevDock"
+            className="hero-logo-horizontal"
+          />
+        </div>
+        <h1 className="hero-subtitle">
           Understand Any Codebase
           <span className="hero-title-gradient"> in Minutes</span>
-        </h2>
+        </h1>
         
         <p className="hero-subheading">
           Whether you're a new developer joining a team or exploring a new repository, DevDock turns confusion into clarity in minutes using IBM watsonx AI and Bob.
@@ -100,21 +101,11 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
             )}
           </button>
 
-          <div className="hero-comparison-block">
-            <div className="comparison-line-old">
-              <span className="comparison-icon">❌</span>
-              <span className="comparison-text">Manual onboarding takes days</span>
-            </div>
-            <div className="comparison-divider"></div>
-            <div className="comparison-line-new">
-              <span className="comparison-icon">⚡</span>
-              <span className="comparison-text">DevDock gets you productive in minutes</span>
-            </div>
+          <div className="hero-info-section">
+            <p className="info-label">Manual onboarding takes days</p>
+            <p className="info-label">DevDock gets you productive in minutes</p>
+            <p className="info-label">Paste any GitHub repository to get started</p>
           </div>
-
-          <p className="hero-helper-text">
-            Paste any GitHub repository to get started
-          </p>
         </form>
 
         <div className="hero-footer-section">
