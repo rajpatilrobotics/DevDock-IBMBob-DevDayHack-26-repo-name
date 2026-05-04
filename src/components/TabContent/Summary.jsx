@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanMarkdown } from '../../utils/textFormatting';
+import { cleanMarkdown, enhanceTextFormatting } from '../../utils/textFormatting';
 
 function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, summaryError, quickStartGuide, isQuickStartLoading, commonIssues, isIssuesLoading, firstContributions, isContributionsLoading, codeAnalysis, isCodeAnalysisLoading }) {
   // If no repoData, show placeholder
@@ -141,7 +141,10 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           
           {aiSummary && !isSummaryLoading && (
             <div className="ai-summary-content">
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{cleanMarkdown(aiSummary)}</pre>
+              <pre
+                style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}
+                dangerouslySetInnerHTML={{ __html: enhanceTextFormatting(cleanMarkdown(aiSummary)) }}
+              />
             </div>
           )}
           
@@ -225,7 +228,10 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           
           {quickStartGuide && !isQuickStartLoading && (
             <div className="quick-start-content">
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{cleanMarkdown(quickStartGuide)}</pre>
+              <pre
+                style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}
+                dangerouslySetInnerHTML={{ __html: enhanceTextFormatting(cleanMarkdown(quickStartGuide)) }}
+              />
             </div>
           )}
           
@@ -350,7 +356,10 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           
           {commonIssues && !isIssuesLoading && (
             <div className="issues-content">
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{cleanMarkdown(commonIssues)}</pre>
+              <pre
+                style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}
+                dangerouslySetInnerHTML={{ __html: enhanceTextFormatting(cleanMarkdown(commonIssues)) }}
+              />
             </div>
           )}
           

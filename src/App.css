@@ -690,6 +690,15 @@
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--text-secondary);
+
+/* Bold formatting for important keywords in AI-generated content */
+.ai-summary-content strong,
+.quick-start-content strong,
+.issues-content strong {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1em;
+}
 }
 }
 

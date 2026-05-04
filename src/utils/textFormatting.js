@@ -115,4 +115,72 @@ export function processAIResponse(response) {
   return cleaned;
 }
 
+/**
+ * Enhance text by making important keywords and headings bold
+ * Wraps important terms in <strong> tags for better readability
+ *
+ * @param {string} text - Text to enhance
+ * @returns {string} Enhanced text with bold formatting
+ */
+export function enhanceTextFormatting(text) {
+  if (!text || typeof text !== 'string') {
+    return text;
+  }
+
+  let enhanced = text;
+
+  // Common important keywords to make bold (case-insensitive)
+  const importantKeywords = [
+    'Prerequisites',
+    'Requirements',
+    'Installation',
+    'Setup',
+    'Configuration',
+    'Important',
+    'Note',
+    'Warning',
+    'Caution',
+    'Step',
+    'Usage',
+    'Example',
+    'Features',
+    'Benefits',
+    'Overview',
+    'Summary',
+    'Key Points',
+    'Getting Started',
+    'Quick Start',
+    'Dependencies',
+    'Environment Variables',
+    'API Keys',
+    'Commands',
+    'Scripts',
+    'Testing',
+    'Deployment',
+    'Production',
+    'Development',
+    'Build',
+    'Run',
+    'Start',
+    'Stop'
+  ];
+
+  // Make keywords bold when they appear at the start of a line or after a colon
+  importantKeywords.forEach(keyword => {
+    // Match keyword at start of line (with optional whitespace)
+    const startOfLineRegex = new RegExp(`^(\\s*)(${keyword})(:?)`, 'gim');
+    enhanced = enhanced.replace(startOfLineRegex, '$1<strong>$2</strong>$3');
+    
+    // Match keyword after a newline
+    const afterNewlineRegex = new RegExp(`(\\n\\s*)(${keyword})(:?)`, 'gim');
+    enhanced = enhanced.replace(afterNewlineRegex, '$1<strong>$2</strong>$3');
+  });
+
+  // Make numbered steps bold (e.g., "1.", "Step 1:", "Step 1 -")
+  enhanced = enhanced.replace(/^(\s*)(\d+\.|Step \d+:?|Step \d+ -)/gim, '$1<strong>$2</strong>');
+  enhanced = enhanced.replace(/(\n\s*)(\d+\.|Step \d+:?|Step \d+ -)/gim, '$1<strong>$2</strong>');
+
+  return enhanced;
+}
+
 // Made with Bob
