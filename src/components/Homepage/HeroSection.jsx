@@ -50,6 +50,11 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
           Whether you're a new developer joining a team or exploring a new repository, DevDock turns confusion into clarity in minutes using IBM Bob and watsonx AI.
         </p>
 
+        <div className="hero-info-section">
+          <p className="info-label">Manual onboarding takes days</p>
+          <p className="info-label">DevDock gets you productive in minutes</p>
+        </div>
+
         <p className="hero-support-line">
           From first day to first contribution faster than ever.
         </p>
@@ -101,8 +106,6 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
           </button>
 
           <div className="hero-info-section">
-            <p className="info-label">Manual onboarding takes days</p>
-            <p className="info-label">DevDock gets you productive in minutes</p>
             <p className="info-label">Paste any GitHub repository to get started</p>
           </div>
         </form>
