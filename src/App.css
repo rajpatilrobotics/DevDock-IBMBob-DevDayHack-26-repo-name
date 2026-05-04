@@ -614,7 +614,6 @@
 .new-analysis-btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
   padding: 0.75rem 1.5rem;
   background: var(--gradient-primary);
   border: none;
@@ -632,24 +631,6 @@
 .new-analysis-btn:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow: var(--glow-accent);
-}
-
-.new-analysis-btn .new-analysis-icon {
-  font-size: 1.1rem;
-  animation: rotate 2s linear infinite;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.new-analysis-btn:hover .new-analysis-icon {
-  animation-duration: 0.5s;
 }
 
 /* Download PDF Button in Navbar */

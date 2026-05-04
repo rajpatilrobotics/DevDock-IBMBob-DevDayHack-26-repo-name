@@ -10,7 +10,6 @@ function TabNavigation({ tabs, activeTab, onTabChange, onDownloadPDF, isGenerati
             onClick={onNewAnalysis}
             title="Analyze a new repository"
           >
-            <span className="new-analysis-icon">🔄</span>
             New Analysis
           </button>
         )}
