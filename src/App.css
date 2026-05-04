@@ -419,9 +419,9 @@
 }
 
 .btn-primary:disabled {
-  opacity: 0.6;
-  background: var(--gradient-primary);
-  box-shadow: var(--glow-primary);
+  opacity: 1 !important;
+  background: var(--gradient-primary) !important;
+  box-shadow: var(--glow-primary) !important;
   cursor: not-allowed;
 }
 

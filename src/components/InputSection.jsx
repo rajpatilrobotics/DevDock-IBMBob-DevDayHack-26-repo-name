@@ -65,7 +65,7 @@ function InputSection({ repoUrl, onUrlChange, onAnalyze, onQuickOnboard, isAnaly
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={disabled || !repoUrl.trim()}
+            disabled={disabled}
           >
             {isAnalyzing ? 'Analyzing...' : 'Analyze Repo'}
           </button>
@@ -74,7 +74,7 @@ function InputSection({ repoUrl, onUrlChange, onAnalyze, onQuickOnboard, isAnaly
             type="button"
             className="btn btn-secondary"
             onClick={handleQuickOnboardClick}
-            disabled={disabled || !repoUrl.trim()}
+            disabled={disabled}
           >
             Onboard me in 5 minutes
           </button>
