@@ -349,45 +349,48 @@ const scoreAndFilterNodes = (nodes, maxNodes = 15) => {
 // ============================================================================
 
 const getLayoutedElements = (nodes, edges) => {
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  // Group nodes by layer for vertical arrangement
+  const layerOrder = ['entry', 'ui', 'api', 'backend', 'data'];
+  const nodesByLayer = {};
   
-  // Configure layout with proper spacing for clean, professional look
-  dagreGraph.setGraph({
-    rankdir: 'TB',  // Top to bottom
-    nodesep: 250,   // Horizontal spacing (increased for better clarity)
-    ranksep: 150,   // Vertical spacing (increased for better hierarchy)
-    marginx: 80,    // Increased margins
-    marginy: 80,
-    ranker: 'tight-tree'
+  // Initialize layers
+  layerOrder.forEach(layer => {
+    nodesByLayer[layer] = [];
   });
   
-  // Add nodes to dagre
+  // Group nodes by their layer
   nodes.forEach(node => {
-    dagreGraph.setNode(node.id, {
-      width: 280,
-      height: 140
+    if (nodesByLayer[node.layer]) {
+      nodesByLayer[node.layer].push(node);
+    }
+  });
+  
+  // Calculate positions manually for clear vertical layout
+  const layoutedNodes = [];
+  let currentY = 100;
+  const layerSpacing = 250; // Vertical space between layers
+  const nodeSpacing = 300;  // Horizontal space between nodes in same layer
+  
+  layerOrder.forEach(layer => {
+    const layerNodes = nodesByLayer[layer];
+    if (layerNodes.length === 0) return;
+    
+    // Calculate starting X to center the layer
+    const totalWidth = (layerNodes.length - 1) * nodeSpacing;
+    let currentX = (800 - totalWidth) / 2; // Center based on container width
+    
+    layerNodes.forEach((node, index) => {
+      layoutedNodes.push({
+        ...node,
+        position: {
+          x: currentX,
+          y: currentY
+        }
+      });
+      currentX += nodeSpacing;
     });
-  });
-  
-  // Add edges to dagre
-  edges.forEach(edge => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-  
-  // Calculate layout
-  dagre.layout(dagreGraph);
-  
-  // Apply calculated positions to nodes
-  const layoutedNodes = nodes.map(node => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    return {
-      ...node,
-      position: {
-        x: nodeWithPosition.x - 140,  // Center the node
-        y: nodeWithPosition.y - 70
-      }
-    };
+    
+    currentY += layerSpacing;
   });
   
   return { nodes: layoutedNodes, edges };
