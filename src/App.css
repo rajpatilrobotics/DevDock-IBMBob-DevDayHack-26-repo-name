@@ -2336,6 +2336,25 @@
   font-weight: 600;
 }
 
+.footer-logo-section {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-logo {
+  height: 40px;
+  width: auto;
+  filter: brightness(0.9);
+  transition: all 0.3s ease;
+}
+
+.footer-logo:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
 .footer-developer {
   display: flex;
   align-items: center;
