@@ -453,6 +453,69 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
         </div>
       </div>
 
+      {/* Code Analysis Summary */}
+      {codeAnalysis && codeAnalysis.summary && (
+        <div className="content-card">
+          <h2 className="card-title">📊 Code Analysis Summary</h2>
+          <div className="card-content">
+            {isCodeAnalysisLoading ? (
+              <div className="loading-container">
+                <div className="spinner"></div>
+                <p>Analyzing code structure...</p>
+              </div>
+            ) : (
+              <div className="repo-stats-grid">
+                <div className="stat-row">
+                  <span className="stat-label">Files Analyzed:</span>
+                  <span className="stat-value">{codeAnalysis.summary.analyzedFiles || 0} files</span>
+                </div>
+                <div className="stat-row">
+                  <span className="stat-label">Total Lines of Code:</span>
+                  <span className="stat-value">{(codeAnalysis.summary.totalLines || 0).toLocaleString()} lines</span>
+                </div>
+                {codeAnalysis.definitions && codeAnalysis.definitions.functions && (
+                  <div className="stat-row">
+                    <span className="stat-label">Functions Detected:</span>
+                    <span className="stat-value">{codeAnalysis.definitions.functions.length} functions</span>
+                  </div>
+                )}
+                {codeAnalysis.definitions && codeAnalysis.definitions.classes && (
+                  <div className="stat-row">
+                    <span className="stat-label">Classes Detected:</span>
+                    <span className="stat-value">{codeAnalysis.definitions.classes.length} classes</span>
+                  </div>
+                )}
+                {codeAnalysis.security && (
+                  <div className="stat-row">
+                    <span className="stat-label">Security Issues:</span>
+                    <span className="stat-value" style={{
+                      color: (codeAnalysis.security.critical?.length || 0) > 0 ? '#dc3545' : '#28a745'
+                    }}>
+                      {(codeAnalysis.security.critical?.length || 0) +
+                       (codeAnalysis.security.high?.length || 0) +
+                       (codeAnalysis.security.medium?.length || 0) +
+                       (codeAnalysis.security.low?.length || 0)} found
+                    </span>
+                  </div>
+                )}
+                {codeAnalysis.summary.frameworks && codeAnalysis.summary.frameworks.length > 0 && (
+                  <div className="stat-row">
+                    <span className="stat-label">Frameworks:</span>
+                    <span className="stat-value">{codeAnalysis.summary.frameworks.join(', ')}</span>
+                  </div>
+                )}
+                {codeAnalysis.summary.patterns && codeAnalysis.summary.patterns.length > 0 && (
+                  <div className="stat-row">
+                    <span className="stat-label">Architecture Patterns:</span>
+                    <span className="stat-value">{codeAnalysis.summary.patterns.join(', ')}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Important Files Detected */}
       <div className="content-card">
         <h2 className="card-title">🔍 Important Files Detected</h2>
