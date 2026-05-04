@@ -86,7 +86,7 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
           <button
             type="submit"
             className="hero-cta-button"
-            disabled={isAnalyzing || !repoUrl.trim()}
+            disabled={isAnalyzing}
           >
             {isAnalyzing ? (
               <>
