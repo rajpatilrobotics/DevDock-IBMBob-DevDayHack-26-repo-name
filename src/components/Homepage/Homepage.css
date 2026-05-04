@@ -154,12 +154,13 @@
 }
 
 .hero-support-line {
-  font-size: 0.9rem;
-  color: #718096;
-  opacity: 0.8;
+  font-size: 1rem;
+  color: #4299e1;
+  opacity: 1;
   margin-bottom: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   animation: fadeInUp 0.8s ease 0.35s both;
+  text-shadow: 0 0 20px rgba(66, 153, 225, 0.3);
 }
 
 .hero-chips-section {
