@@ -653,9 +653,16 @@
   left: 0;
   right: 0;
   z-index: 999; /* Above header (998) */
-  background: rgba(0, 0, 0, 0.95);
+  /* Subtle gradient overlay for visual differentiation */
+  background: linear-gradient(
+    135deg,
+    rgba(79, 140, 255, 0.08) 0%,
+    rgba(122, 92, 255, 0.08) 100%
+  ),
+  rgba(0, 0, 0, 0.85);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
+  border-top: 1px solid rgba(79, 140, 255, 0.1); /* Subtle accent border */
   padding: 1rem 2rem;
   box-shadow: var(--shadow-md);
   height: 70px; /* FIXED height - never changes */
