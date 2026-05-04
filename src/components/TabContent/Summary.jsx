@@ -55,9 +55,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
             </div>
             <div className="stat-row">
               <span className="stat-label">Primary Language:</span>
-              <span className="stat-value">
-                <span className="language-badge-small">{repoInfo.language}</span>
-              </span>
+              <span className="stat-value">{repoInfo.language}</span>
             </div>
             <div className="stat-row">
               <span className="stat-label">Stars:</span>
