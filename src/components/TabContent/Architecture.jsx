@@ -1912,7 +1912,7 @@ function Architecture({ repoData, architectureAnalysis, isArchitectureLoading, a
       )}
 
       {/* Unified Comprehensive Technology Stack Visualization */}
-      {techStack && (Object.values(techStack || {}).some(arr => Array.isArray(arr) && arr.length > 0)) && <UnifiedTechStackDiagram techStack={techStack} />}
+      {techStack && Object.keys(techStack).length > 0 && (Object.values(techStack).some(arr => Array.isArray(arr) && arr.length > 0)) && <UnifiedTechStackDiagram techStack={techStack} />}
 
       {/* Code Analysis - Detected Patterns & Structure */}
       {codeAnalysis && codeAnalysis.summary && (
