@@ -33,7 +33,7 @@ function Header({ onLogoClick }) {
               src="/devdock-logo-horizontal.svg"
               alt="DevDock"
               className="logo-image"
-              style={{ height: isScrolled ? '40px' : '50px', width: 'auto' }}
+              style={{ height: '40px', width: 'auto' }}
             />
           </div>
           <p className="tagline">AI-Powered Code Analysis & Onboarding Platform</p>

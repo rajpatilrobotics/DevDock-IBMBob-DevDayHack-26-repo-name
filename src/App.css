@@ -102,7 +102,7 @@
   flex: 1;
   width: 100%;
   padding: 0;
-  padding-top: 170px; /* Account for fixed header (100px) + fixed tab nav (70px) */
+  padding-top: 150px; /* FIXED: header (80px) + navbar (70px) = 150px total */
 }
 
 /* Split-Screen Layout */
@@ -149,10 +149,10 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: none; /* Removed to prevent overlap with navbar border */
-  padding: 1.25rem 2rem;
+  padding: 1rem 2rem;
   box-shadow: none; /* Navbar will provide shadow */
-  transition: all 0.25s ease;
-  min-height: 90px; /* Ensure consistent height */
+  transition: background 0.25s ease, backdrop-filter 0.25s ease;
+  height: 80px; /* FIXED height - never changes */
 }
 
 /* Scrolled state with enhanced background and shadow */
@@ -161,8 +161,7 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: none; /* Navbar will provide shadow */
-  padding: 1rem 2rem;
-  min-height: 80px; /* Slightly smaller when scrolled */
+  /* NO padding or height changes - stays consistent */
 }
 
 
@@ -623,16 +622,16 @@
    =================================== */
 .tab-navigation {
   position: fixed;
-  top: 90px; /* Match header min-height */
+  top: 80px; /* Match header FIXED height */
   left: 0;
   right: 0;
-  z-index: 999; /* Below header (1001) */
+  z-index: 999; /* Above header (998) */
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   padding: 1rem 2rem;
   box-shadow: var(--shadow-md);
-  min-height: 70px; /* Consistent navbar height */
+  height: 70px; /* FIXED height - never changes */
 }
 
 .tab-nav-container {
