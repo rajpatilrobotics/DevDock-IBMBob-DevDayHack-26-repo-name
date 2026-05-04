@@ -665,14 +665,16 @@
   backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
   border-top: 1px solid rgba(79, 140, 255, 0.1); /* Subtle accent border */
-  padding: 1rem 2rem;
+  padding: 0 2rem; /* Removed vertical padding */
   box-shadow: var(--shadow-md);
   height: 70px; /* FIXED height - never changes */
+  display: flex; /* Added flex to center content */
+  align-items: center; /* Vertically center all content */
 }
 
 .tab-nav-container {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
