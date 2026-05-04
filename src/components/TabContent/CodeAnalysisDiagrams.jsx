@@ -219,12 +219,12 @@ function FileStructureDiagram({ codeAnalysis }) {
         color: '#fff'
       }
     });
-    yPos += 150;
+    yPos += 180; // Increased from 150 to 180 for better spacing
     
     // Directory nodes
     Object.keys(dirGroups).forEach((dir, dirIndex) => {
       const xPos = 100 + (dirIndex % 3) * xGap;
-      const yOffset = Math.floor(dirIndex / 3) * 200;
+      const yOffset = Math.floor(dirIndex / 3) * 250; // Increased from 200 to 250
       
       nodes.push({
         id: `dir-${dir}`,
@@ -267,7 +267,7 @@ function FileStructureDiagram({ codeAnalysis }) {
               </div>
             )
           },
-          position: { x: xPos - 60 + fileIndex * 60, y: yPos + yOffset + 120 },
+          position: { x: xPos - 60 + fileIndex * 80, y: yPos + yOffset + 150 },
           style: {
             background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
