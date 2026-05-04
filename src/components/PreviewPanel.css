@@ -4,7 +4,7 @@
 
 .preview-panel {
   height: 100%;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   overflow-y: auto;
   animation: fadeIn 0.6s ease;
 }
@@ -36,20 +36,20 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--spacing-xl) var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
   min-height: 400px;
 }
 
 .preview-icon {
   font-size: 4rem;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   animation: float 3s ease-in-out infinite;
 }
 
 .preview-title {
   font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -60,14 +60,14 @@
   color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   max-width: 400px;
 }
 
 .preview-features {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   width: 100%;
   max-width: 300px;
 }
@@ -75,8 +75,8 @@
 .preview-feature-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
@@ -88,7 +88,7 @@
 
 .preview-feature-item:hover {
   background: var(--glass-bg-hover);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(79, 140, 255, 0.3);
   transform: translateX(5px);
 }
 
@@ -101,25 +101,25 @@
    =================================== */
 
 .preview-header {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .preview-status {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .preview-status.analyzing {
   color: var(--accent-primary);
-  border-color: rgba(79, 172, 254, 0.3);
+  border-color: rgba(79, 140, 255, 0.3);
 }
 
 .preview-status.complete {
@@ -154,7 +154,7 @@
    =================================== */
 
 .preview-section {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
   animation: fadeIn 0.5s ease;
 }
 
@@ -162,7 +162,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
 }
 
 .section-icon {
@@ -177,7 +177,7 @@
 }
 
 /* ===================================
-   Preview Cards
+   Preview Cards (Glass Style)
    =================================== */
 
 .preview-card {
@@ -185,15 +185,16 @@
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   transition: var(--transition-base);
+  box-shadow: var(--shadow-lg);
 }
 
 .preview-card:hover {
   background: var(--glass-bg-hover);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
 }
 
 /* ===================================
@@ -204,7 +205,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-sm) 0;
+  padding: var(--spacing-xs) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -234,12 +235,12 @@
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .summary-stat {
   text-align: center;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-sm);
   transition: var(--transition-base);
@@ -275,14 +276,14 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) 0;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) 0;
 }
 
 .arch-block {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(79, 140, 255, 0.1);
+  border: 1px solid rgba(79, 140, 255, 0.3);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-size: 0.9rem;
@@ -336,12 +337,12 @@
 .insight-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
   background: rgba(255, 255, 255, 0.02);
   border-radius: var(--radius-sm);
   border-left: 3px solid;
-  transition: var(--transition-fast);
+  transition: var(--transition-base);
 }
 
 .insight-item.success {
@@ -374,8 +375,8 @@
 .quick-action-btn {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: var(--radius-sm);
@@ -388,8 +389,8 @@
 }
 
 .quick-action-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: rgba(102, 126, 234, 0.3);
+  background: rgba(79, 140, 255, 0.1);
+  border-color: rgba(79, 140, 255, 0.3);
   color: var(--text-primary);
   transform: translateX(5px);
 }
@@ -444,11 +445,11 @@
 
 @media (max-width: 768px) {
   .preview-panel {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
   }
 
   .preview-empty-state {
-    padding: var(--spacing-lg) var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-xs);
     min-height: 300px;
   }
 
