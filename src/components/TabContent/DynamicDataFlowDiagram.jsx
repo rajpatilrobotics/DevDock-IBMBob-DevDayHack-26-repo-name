@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import ReactFlow, { Background, Controls, MiniMap } from 'reactflow';
 import dagre from 'dagre';
 import 'reactflow/dist/style.css';
@@ -201,7 +201,11 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: targetNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#64748b', strokeWidth: 2 }
+            style: { stroke: '#64748b', strokeWidth: 2 },
+            markerEnd: {
+              type: 'arrowclosed',
+              color: '#64748b'
+            }
           });
           edgeSet.add(edgeId);
         }
@@ -221,7 +225,11 @@ const generateEdges = (nodes, codeAnalysis) => {
             type: 'smoothstep',
             animated: true,
             label: 'HTTP',
-            style: { stroke: '#3b82f6', strokeWidth: 2 }
+            style: { stroke: '#3b82f6', strokeWidth: 2 },
+            markerEnd: {
+              type: 'arrowclosed',
+              color: '#3b82f6'
+            }
           });
           edgeSet.add(edgeId);
         }
@@ -240,7 +248,11 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: backendNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#8b5cf6', strokeWidth: 2 }
+            style: { stroke: '#8b5cf6', strokeWidth: 2 },
+            markerEnd: {
+              type: 'arrowclosed',
+              color: '#8b5cf6'
+            }
           });
           edgeSet.add(edgeId);
         }
@@ -259,7 +271,11 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: dataNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#10b981', strokeWidth: 2 }
+            style: { stroke: '#10b981', strokeWidth: 2 },
+            markerEnd: {
+              type: 'arrowclosed',
+              color: '#10b981'
+            }
           });
           edgeSet.add(edgeId);
         }
@@ -335,13 +351,13 @@ const getLayoutedElements = (nodes, edges) => {
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
   
-  // Configure layout with proper spacing
+  // Configure layout with proper spacing for clean, professional look
   dagreGraph.setGraph({
     rankdir: 'TB',  // Top to bottom
-    nodesep: 200,   // Horizontal spacing (200px minimum)
-    ranksep: 120,   // Vertical spacing (120px minimum)
-    marginx: 50,
-    marginy: 50,
+    nodesep: 250,   // Horizontal spacing (increased for better clarity)
+    ranksep: 150,   // Vertical spacing (increased for better hierarchy)
+    marginx: 80,    // Increased margins
+    marginy: 80,
     ranker: 'tight-tree'
   });
   
@@ -404,11 +420,12 @@ const FlowNode = ({ node }) => {
     <div style={{
       background: `linear-gradient(135deg, ${color}20 0%, ${color}08 100%)`,
       border: `2px solid ${color}`,
-      borderRadius: '12px',
-      padding: '16px',
+      borderRadius: '16px',
+      padding: '18px',
       minWidth: '260px',
       maxWidth: '280px',
-      boxShadow: `0 4px 20px ${color}40`
+      boxShadow: `0 8px 32px ${color}50, 0 0 0 1px ${color}20`,
+      transition: 'all 0.3s ease'
     }}>
       {/* Header */}
       <div style={{
@@ -497,6 +514,18 @@ const FlowNode = ({ node }) => {
 // ============================================================================
 
 function DynamicDataFlowDiagram({ codeAnalysis }) {
+  // Callback to handle React Flow initialization and auto-fit view
+  const onInit = useCallback((reactFlowInstance) => {
+    // Delay to ensure nodes are fully rendered before fitting view
+    setTimeout(() => {
+      reactFlowInstance.fitView({
+        padding: 0.2,
+        duration: 800,
+        includeHiddenNodes: false
+      });
+    }, 100);
+  }, []);
+
   const { nodes, edges } = useMemo(() => {
     if (!codeAnalysis || !codeAnalysis.files || codeAnalysis.files.length === 0) {
       return { nodes: [], edges: [] };
@@ -596,14 +625,22 @@ function DynamicDataFlowDiagram({ codeAnalysis }) {
         <p className="text-secondary" style={{ marginBottom: '20px' }}>
           Real data flow extracted from repository code. Showing top {nodes.length} most important nodes.
         </p>
-        <div style={{ height: '700px', background: '#1a1a2e', borderRadius: '8px', overflow: 'hidden' }}>
+        <div style={{ height: '800px', background: '#1a1a2e', borderRadius: '8px', overflow: 'hidden' }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            onInit={onInit}
             fitView
+            fitViewOptions={{
+              padding: 0.2,
+              includeHiddenNodes: false,
+              minZoom: 0.5,
+              maxZoom: 1.5
+            }}
+            defaultViewport={{ x: 0, y: 0, zoom: 1 }}
             attributionPosition="bottom-left"
             minZoom={0.1}
-            maxZoom={1.5}
+            maxZoom={2}
           >
             <Background color="#2a2a3e" gap={16} />
             <Controls />
