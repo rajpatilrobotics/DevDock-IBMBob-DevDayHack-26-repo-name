@@ -513,7 +513,7 @@ Keep response structured, concise, and easy to scan using bullet points.`;
   const captureAllDiagrams = async () => {
     const diagrams = [
       { id: 'system-architecture-diagram', title: '🏗️ Interactive System Architecture' },
-      { id: 'dynamic-dataflow-diagram', title: '📊 Dynamic Data Flow Diagram' },
+      { id: 'dynamic-flow-diagram', title: '📊 Dynamic Data Flow Diagram' },
       { id: 'tech-stack-diagram', title: '🏗️ Comprehensive Technology Stack' },
       { id: 'function-call-flow-diagram', title: '🔄 Function Call Flow (From Code Analysis)' },
       { id: 'file-structure-diagram', title: '📁 Analyzed File Structure' },
@@ -574,6 +574,11 @@ Keep response structured, concise, and easy to scan using bullet points.`;
     try {
       // ========== CAPTURE ARCHITECTURE DIAGRAMS ==========
       console.log('📸 Starting diagram capture...');
+      setPdfProgress('Capturing diagrams...');
+      
+      // Wait a moment to ensure diagrams are fully rendered
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const capturedDiagrams = await captureAllDiagrams();
       console.log(`✅ Captured ${capturedDiagrams.length} diagrams`);
       
@@ -1321,6 +1326,28 @@ Keep response structured, concise, and easy to scan using bullet points.`;
 
               <div className="tab-content-wrapper">
                 {renderTabContent()}
+              </div>
+              
+              {/* Hidden Architecture component for PDF diagram capture */}
+              <div style={{
+                position: 'fixed',
+                left: '-9999px',
+                top: 0,
+                width: '1200px',
+                height: '3000px',
+                overflow: 'hidden',
+                pointerEvents: 'none',
+                zIndex: -1
+              }}>
+                <Architecture
+                  repoData={repoData}
+                  architectureAnalysis={architectureAnalysis}
+                  isArchitectureLoading={isArchitectureLoading}
+                  architectureError={architectureError}
+                  detailedArchitecture={detailedArchitecture}
+                  codeAnalysis={codeAnalysis}
+                  isCodeAnalysisLoading={isCodeAnalysisLoading}
+                />
               </div>
             </div>
           )}
