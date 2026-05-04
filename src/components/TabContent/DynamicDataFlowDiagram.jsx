@@ -624,7 +624,7 @@ function DynamicDataFlowDiagram({ codeAnalysis }) {
       <h2 className="card-title">📊 Dynamic Data Flow Diagram</h2>
       <div className="card-content">
         <p className="text-secondary" style={{ marginBottom: '20px' }}>
-          Real data flow extracted from repository code. Showing top {nodes.length} most important nodes.
+          🔄 Real data flow extracted from repository code. Showing top {nodes.length} most important nodes with enhanced layout.
         </p>
         <div style={{ position: 'relative', height: '800px', background: '#1a1a2e', borderRadius: '8px', overflow: 'hidden' }}>
           <DownloadDiagramButton
