@@ -202,10 +202,16 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: targetNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#64748b', strokeWidth: 2 },
+            style: {
+              stroke: '#64748b',
+              strokeWidth: 3,
+              strokeDasharray: '5,5'
+            },
             markerEnd: {
               type: 'arrowclosed',
-              color: '#64748b'
+              color: '#64748b',
+              width: 25,
+              height: 25
             }
           });
           edgeSet.add(edgeId);
@@ -226,10 +232,14 @@ const generateEdges = (nodes, codeAnalysis) => {
             type: 'smoothstep',
             animated: true,
             label: 'HTTP',
-            style: { stroke: '#3b82f6', strokeWidth: 2 },
+            labelStyle: { fill: '#3b82f6', fontWeight: 600, fontSize: 12 },
+            labelBgStyle: { fill: '#1a1a2e', fillOpacity: 0.8 },
+            style: { stroke: '#3b82f6', strokeWidth: 3 },
             markerEnd: {
               type: 'arrowclosed',
-              color: '#3b82f6'
+              color: '#3b82f6',
+              width: 25,
+              height: 25
             }
           });
           edgeSet.add(edgeId);
@@ -249,10 +259,15 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: backendNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#8b5cf6', strokeWidth: 2 },
+            label: 'Process',
+            labelStyle: { fill: '#8b5cf6', fontWeight: 600, fontSize: 12 },
+            labelBgStyle: { fill: '#1a1a2e', fillOpacity: 0.8 },
+            style: { stroke: '#8b5cf6', strokeWidth: 3 },
             markerEnd: {
               type: 'arrowclosed',
-              color: '#8b5cf6'
+              color: '#8b5cf6',
+              width: 25,
+              height: 25
             }
           });
           edgeSet.add(edgeId);
@@ -272,10 +287,15 @@ const generateEdges = (nodes, codeAnalysis) => {
             target: dataNode.id,
             type: 'smoothstep',
             animated: true,
-            style: { stroke: '#10b981', strokeWidth: 2 },
+            label: 'Store',
+            labelStyle: { fill: '#10b981', fontWeight: 600, fontSize: 12 },
+            labelBgStyle: { fill: '#1a1a2e', fillOpacity: 0.8 },
+            style: { stroke: '#10b981', strokeWidth: 3 },
             markerEnd: {
               type: 'arrowclosed',
-              color: '#10b981'
+              color: '#10b981',
+              width: 25,
+              height: 25
             }
           });
           edgeSet.add(edgeId);
@@ -349,7 +369,7 @@ const scoreAndFilterNodes = (nodes, maxNodes = 15) => {
 // ============================================================================
 
 const getLayoutedElements = (nodes, edges) => {
-  // Group nodes by layer for vertical arrangement
+  // Group nodes by layer for adaptive grid layout
   const layerOrder = ['entry', 'ui', 'api', 'backend', 'data'];
   const nodesByLayer = {};
   
@@ -365,32 +385,50 @@ const getLayoutedElements = (nodes, edges) => {
     }
   });
   
-  // Calculate positions manually for clear vertical layout
+  // Calculate grid dimensions based on node count
+  const calculateGrid = (count) => {
+    if (count === 1) return { cols: 1, rows: 1 };
+    if (count === 2) return { cols: 2, rows: 1 };
+    if (count <= 4) return { cols: 2, rows: 2 };
+    if (count <= 6) return { cols: 3, rows: 2 };
+    if (count <= 9) return { cols: 3, rows: 3 };
+    return { cols: 4, rows: Math.ceil(count / 4) };
+  };
+  
+  // Layout configuration
   const layoutedNodes = [];
-  let currentY = 100;
-  const layerSpacing = 250; // Vertical space between layers
-  const nodeSpacing = 300;  // Horizontal space between nodes in same layer
+  let currentY = 80;
+  const layerSpacing = 220; // Vertical space between layers
+  const nodeWidth = 280;
+  const nodeHeight = 140;
+  const horizontalGap = 50; // Gap between nodes horizontally
+  const verticalGap = 40;   // Gap between rows in same layer
+  const containerWidth = 1400; // Approximate container width
   
   layerOrder.forEach(layer => {
     const layerNodes = nodesByLayer[layer];
     if (layerNodes.length === 0) return;
     
-    // Calculate starting X to center the layer
-    const totalWidth = (layerNodes.length - 1) * nodeSpacing;
-    let currentX = (800 - totalWidth) / 2; // Center based on container width
+    const grid = calculateGrid(layerNodes.length);
+    const totalGridWidth = (grid.cols * nodeWidth) + ((grid.cols - 1) * horizontalGap);
+    const startX = (containerWidth - totalGridWidth) / 2; // Center the grid
     
     layerNodes.forEach((node, index) => {
+      const row = Math.floor(index / grid.cols);
+      const col = index % grid.cols;
+      
+      // Calculate position in grid
+      const x = startX + (col * (nodeWidth + horizontalGap));
+      const y = currentY + (row * (nodeHeight + verticalGap));
+      
       layoutedNodes.push({
         ...node,
-        position: {
-          x: currentX,
-          y: currentY
-        }
+        position: { x, y }
       });
-      currentX += nodeSpacing;
     });
     
-    currentY += layerSpacing;
+    // Move to next layer (account for all rows in current layer)
+    currentY += (grid.rows * (nodeHeight + verticalGap)) + layerSpacing;
   });
   
   return { nodes: layoutedNodes, edges };
