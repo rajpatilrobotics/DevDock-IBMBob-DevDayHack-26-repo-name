@@ -7,7 +7,7 @@ function HowItWorks() {
       icon: '📋',
       title: 'Paste Repository',
       description: 'Enter any GitHub repository URL into the input field above',
-      time: '< 10 seconds',
+      time: 'Seconds',
       timeLabel: 'Fast'
     },
     {
