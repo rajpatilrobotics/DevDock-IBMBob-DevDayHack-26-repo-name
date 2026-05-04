@@ -168,37 +168,6 @@ function ImpactComparison() {
             <div className="stat-sublabel">Onboarding Time</div>
           </div>
         </div>
-
-        {/* Feature Highlights */}
-        <div className="feature-highlights">
-          <h3 className="feature-highlights-title">✨ Key Features</h3>
-          <div className="feature-badges">
-            <div className="feature-badge">
-              <span className="badge-icon">🤖</span>
-              <span className="badge-text">AI-Powered Analysis</span>
-            </div>
-            <div className="feature-badge">
-              <span className="badge-icon">📊</span>
-              <span className="badge-text">Interactive Diagrams</span>
-            </div>
-            <div className="feature-badge">
-              <span className="badge-icon">🛡️</span>
-              <span className="badge-text">Security Scanning</span>
-            </div>
-            <div className="feature-badge">
-              <span className="badge-icon">💬</span>
-              <span className="badge-text">IBM Watsonx Chat</span>
-            </div>
-            <div className="feature-badge">
-              <span className="badge-icon">📱</span>
-              <span className="badge-text">Real-time Updates</span>
-            </div>
-            <div className="feature-badge">
-              <span className="badge-icon">🎯</span>
-              <span className="badge-text">Smart Insights</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
