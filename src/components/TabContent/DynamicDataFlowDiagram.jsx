@@ -398,11 +398,11 @@ const getLayoutedElements = (nodes, edges) => {
   // Layout configuration
   const layoutedNodes = [];
   let currentY = 80;
-  const layerSpacing = 180; // Vertical space between layers (reduced for better connection)
+  const layerSpacing = 280; // Vertical space between layers (increased to prevent overlap)
   const nodeWidth = 280;
   const nodeHeight = 140;
-  const horizontalGap = 50; // Gap between nodes horizontally
-  const verticalGap = 40;   // Gap between rows in same layer
+  const horizontalGap = 100; // Gap between nodes horizontally (increased for better separation)
+  const verticalGap = 80;   // Gap between rows in same layer (increased to prevent name overlap)
   const containerWidth = 1400; // Approximate container width
   
   layerOrder.forEach(layer => {
