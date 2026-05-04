@@ -148,9 +148,9 @@
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: none; /* Removed to prevent overlap with navbar border */
   padding: 1.25rem 2rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none; /* Navbar will provide shadow */
   transition: all 0.25s ease;
   min-height: 90px; /* Ensure consistent height */
 }
@@ -160,7 +160,7 @@
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: none; /* Navbar will provide shadow */
   padding: 1rem 2rem;
   min-height: 80px; /* Slightly smaller when scrolled */
 }
