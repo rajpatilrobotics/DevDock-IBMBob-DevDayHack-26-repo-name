@@ -2112,37 +2112,37 @@
   cursor: not-allowed;
 }
 
-/* Intent-specific colors - Modern Professional Palette */
+/* Intent-specific colors - Matching App Theme (Blue-Purple Palette) */
 .intent-preset-chip.explain {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4F8CFF 0%, #7A5CFF 100%);
 }
 
 .intent-preset-chip.debug {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
 }
 
 .intent-preset-chip.improve {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: linear-gradient(135deg, #5F72FF 0%, #9B59B6 100%);
 }
 
 .intent-preset-chip.setup {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #3EADCF 0%, #5F8CFF 100%);
 }
 
 .intent-preset-chip.find {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, #FFA07A 0%, #FF8C69 100%);
 }
 
 .intent-preset-chip.security {
-  background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+  background: linear-gradient(135deg, #f85149 0%, #d73a49 100%);
 }
 
 .intent-preset-chip.architecture {
-  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  background: linear-gradient(135deg, #6B8CFF 0%, #8B7FFF 100%);
 }
 
 .intent-preset-chip.general {
-  background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+  background: linear-gradient(135deg, #8E7CFF 0%, #A78BFA 100%);
 }
 
 .user-message .message-time {
