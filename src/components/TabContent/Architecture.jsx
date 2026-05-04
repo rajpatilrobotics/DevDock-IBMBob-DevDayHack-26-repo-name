@@ -10,6 +10,7 @@ import 'reactflow/dist/style.css';
 import { FunctionCallFlowDiagram, FileStructureDiagram } from './CodeAnalysisDiagrams';
 import DynamicDataFlowDiagram from './DynamicDataFlowDiagram';
 import { cleanMarkdown } from '../../utils/textFormatting';
+import DownloadDiagramButton from '../DownloadDiagramButton';
 
 // Architecture Analysis Display Component with Enhanced Typography
 function ArchitectureAnalysisDisplay({ analysis }) {
@@ -1836,8 +1837,13 @@ function Architecture({ repoData, architectureAnalysis, isArchitectureLoading, a
       <div className="content-card">
         <h2 className="card-title">🏗️ Interactive System Architecture</h2>
         <div className="card-content">
-          <div className="reactflow-wrapper" style={{ height: '1400px', background: '#0f1419', borderRadius: '8px' }}>
-            <ReactFlow
+          <div className="reactflow-wrapper" style={{ position: 'relative', height: '1400px', background: '#0f1419', borderRadius: '8px' }}>
+            <DownloadDiagramButton
+              containerId="system-architecture-diagram"
+              fileName="system-architecture"
+            />
+            <div id="system-architecture-diagram" style={{ width: '100%', height: '100%' }}>
+              <ReactFlow
               nodes={archNodes}
               edges={archEdges}
               onNodesChange={onArchNodesChange}
@@ -1857,6 +1863,7 @@ function Architecture({ repoData, architectureAnalysis, isArchitectureLoading, a
               />
               <Background variant="dots" gap={12} size={1} color="#373e47" />
             </ReactFlow>
+            </div>
           </div>
           <div className="flow-description-box" style={{ marginTop: '1rem' }}>
             <p className="flow-description">

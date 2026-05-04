@@ -7,6 +7,7 @@ import ReactFlow, {
   useEdgesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import DownloadDiagramButton from '../DownloadDiagramButton';
 
 // Component for Function Call Flow Diagram
 function FunctionCallFlowDiagram({ codeAnalysis }) {
@@ -121,8 +122,13 @@ function FunctionCallFlowDiagram({ codeAnalysis }) {
         <p style={{ marginBottom: '15px', color: 'var(--text-secondary)', fontSize: '14px' }}>
           Real functions detected in the codebase. Functions in the same file are connected.
         </p>
-        <div style={{ height: '600px', background: '#0f1419', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
-          <ReactFlow
+        <div style={{ position: 'relative', height: '600px', background: '#0f1419', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+          <DownloadDiagramButton
+            containerId="function-call-flow-diagram"
+            fileName="function-call-flow"
+          />
+          <div id="function-call-flow-diagram" style={{ width: '100%', height: '100%' }}>
+            <ReactFlow
             nodes={nodes}
             edges={edges}
             fitView
@@ -137,6 +143,7 @@ function FunctionCallFlowDiagram({ codeAnalysis }) {
             />
             <Background variant="dots" gap={16} size={1} color="#373e47" />
           </ReactFlow>
+          </div>
         </div>
         <div style={{
           marginTop: '1rem',
@@ -320,8 +327,13 @@ function FileStructureDiagram({ codeAnalysis }) {
         <p style={{ marginBottom: '15px', color: 'var(--text-secondary)', fontSize: '14px' }}>
           Real file structure from code analysis showing directories and analyzed files.
         </p>
-        <div style={{ height: '700px', background: '#0f1419', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
-          <ReactFlow
+        <div style={{ position: 'relative', height: '700px', background: '#0f1419', borderRadius: '12px', border: '1px solid rgba(102, 126, 234, 0.2)' }}>
+          <DownloadDiagramButton
+            containerId="file-structure-diagram"
+            fileName="file-structure"
+          />
+          <div id="file-structure-diagram" style={{ width: '100%', height: '100%' }}>
+            <ReactFlow
             nodes={nodes}
             edges={edges}
             fitView
@@ -336,6 +348,7 @@ function FileStructureDiagram({ codeAnalysis }) {
             />
             <Background variant="dots" gap={16} size={1} color="#373e47" />
           </ReactFlow>
+          </div>
         </div>
       </div>
     </div>

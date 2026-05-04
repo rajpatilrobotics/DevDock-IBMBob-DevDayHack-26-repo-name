@@ -2,6 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import ReactFlow, { Background, Controls, MiniMap } from 'reactflow';
 import dagre from 'dagre';
 import 'reactflow/dist/style.css';
+import DownloadDiagramButton from '../DownloadDiagramButton';
 
 // ============================================================================
 // FLOW EXTRACTION FROM CODE
@@ -625,8 +626,13 @@ function DynamicDataFlowDiagram({ codeAnalysis }) {
         <p className="text-secondary" style={{ marginBottom: '20px' }}>
           Real data flow extracted from repository code. Showing top {nodes.length} most important nodes.
         </p>
-        <div style={{ height: '800px', background: '#1a1a2e', borderRadius: '8px', overflow: 'hidden' }}>
-          <ReactFlow
+        <div style={{ position: 'relative', height: '800px', background: '#1a1a2e', borderRadius: '8px', overflow: 'hidden' }}>
+          <DownloadDiagramButton
+            containerId="dynamic-flow-diagram"
+            fileName="dynamic-data-flow-diagram"
+          />
+          <div id="dynamic-flow-diagram" style={{ width: '100%', height: '100%' }}>
+            <ReactFlow
             nodes={nodes}
             edges={edges}
             onInit={onInit}
@@ -658,6 +664,7 @@ function DynamicDataFlowDiagram({ codeAnalysis }) {
               maskColor="rgba(0, 0, 0, 0.6)"
             />
           </ReactFlow>
+          </div>
         </div>
       </div>
     </div>
