@@ -21,6 +21,21 @@ function ImpactComparison() {
       icon: '🐌',
       text: 'Slow onboarding',
       subtext: 'Weeks to productivity'
+    },
+    {
+      icon: '🔄',
+      text: 'Context switching',
+      subtext: 'Lost productivity'
+    },
+    {
+      icon: '❓',
+      text: 'Unclear dependencies',
+      subtext: 'Integration issues'
+    },
+    {
+      icon: '📝',
+      text: 'Outdated docs',
+      subtext: 'Confusion & errors'
     }
   ];
 
@@ -47,6 +62,24 @@ function ImpactComparison() {
       icon: '🚀',
       text: 'Rapid onboarding',
       subtext: 'Hours, not weeks',
+      highlight: true
+    },
+    {
+      icon: '🎨',
+      text: 'Interactive diagrams',
+      subtext: 'Visual clarity',
+      highlight: true
+    },
+    {
+      icon: '🔗',
+      text: 'Auto dependency map',
+      subtext: 'Clear relationships',
+      highlight: true
+    },
+    {
+      icon: '📊',
+      text: 'Always up-to-date',
+      subtext: 'Live analysis',
       highlight: true
     }
   ];
@@ -116,15 +149,54 @@ function ImpactComparison() {
         <div className="impact-stats">
           <div className="impact-stat">
             <div className="stat-value">10x</div>
-            <div className="stat-label">Faster Analysis</div>
+            <div className="stat-label">Faster</div>
+            <div className="stat-sublabel">Code Analysis</div>
           </div>
           <div className="impact-stat">
             <div className="stat-value">90%</div>
             <div className="stat-label">Time Saved</div>
+            <div className="stat-sublabel">On Documentation</div>
           </div>
           <div className="impact-stat">
-            <div className="stat-value">2-3min</div>
-            <div className="stat-label">To Full Insights</div>
+            <div className="stat-value">95%</div>
+            <div className="stat-label">Faster</div>
+            <div className="stat-sublabel">Security Scans</div>
+          </div>
+          <div className="impact-stat">
+            <div className="stat-value">80%</div>
+            <div className="stat-label">Less</div>
+            <div className="stat-sublabel">Onboarding Time</div>
+          </div>
+        </div>
+
+        {/* Feature Highlights */}
+        <div className="feature-highlights">
+          <h3 className="feature-highlights-title">✨ Key Features</h3>
+          <div className="feature-badges">
+            <div className="feature-badge">
+              <span className="badge-icon">🤖</span>
+              <span className="badge-text">AI-Powered Analysis</span>
+            </div>
+            <div className="feature-badge">
+              <span className="badge-icon">📊</span>
+              <span className="badge-text">Interactive Diagrams</span>
+            </div>
+            <div className="feature-badge">
+              <span className="badge-icon">🛡️</span>
+              <span className="badge-text">Security Scanning</span>
+            </div>
+            <div className="feature-badge">
+              <span className="badge-icon">💬</span>
+              <span className="badge-text">IBM Watsonx Chat</span>
+            </div>
+            <div className="feature-badge">
+              <span className="badge-icon">📱</span>
+              <span className="badge-text">Real-time Updates</span>
+            </div>
+            <div className="feature-badge">
+              <span className="badge-icon">🎯</span>
+              <span className="badge-text">Smart Insights</span>
+            </div>
           </div>
         </div>
       </div>

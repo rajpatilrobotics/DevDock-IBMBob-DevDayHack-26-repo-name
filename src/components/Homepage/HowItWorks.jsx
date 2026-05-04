@@ -14,7 +14,7 @@ function HowItWorks() {
       number: '02',
       icon: '⚡',
       title: 'AI Analyzes',
-      description: 'IBM Bob AI scans and understands your entire codebase',
+      description: 'DevDock analyzes your entire codebase',
       time: '2-3 minutes',
       timeLabel: 'Automated'
     },
@@ -22,7 +22,7 @@ function HowItWorks() {
       number: '03',
       icon: '✨',
       title: 'Get Insights',
-      description: 'Receive comprehensive analysis, documentation, and interactive tools',
+      description: 'Get comprehensive analysis, security scans, interactive tools, and IBM Watsonx AI for code questions',
       time: 'Instantly',
       timeLabel: 'Ready'
     }

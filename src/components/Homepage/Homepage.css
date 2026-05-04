@@ -1313,6 +1313,69 @@
   font-size: 0.95rem;
   color: #a0aec0;
   font-weight: 500;
+
+.impact-stat .stat-sublabel {
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+/* Feature Highlights */
+.feature-highlights {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.feature-highlights-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #4F8CFF, #f093fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feature-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(79, 140, 255, 0.08);
+  border: 1px solid rgba(79, 140, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+}
+
+.feature-badge:hover {
+  background: rgba(79, 140, 255, 0.15);
+  border-color: rgba(79, 140, 255, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(79, 140, 255, 0.2);
+}
+
+.feature-badge .badge-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px rgba(79, 140, 255, 0.4));
+}
+
+.feature-badge .badge-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
 }
 
 /* ===================================
