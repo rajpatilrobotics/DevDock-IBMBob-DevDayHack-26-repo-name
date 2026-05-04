@@ -418,9 +418,10 @@ class CodeAnalysisService {
    * Analyze entire repository
    * Now works with pre-fetched file contents from backend
    */
-  async analyzeRepository(owner, repo, files, token = null, maxFiles = 15) {
+  async analyzeRepository(owner, repo, files, token = null, maxFiles = 50) {
     console.log(`🔍 Starting repository analysis for ${owner}/${repo}`);
     console.log(`📁 Analyzing ${Math.min(files.length, maxFiles)} files...`);
+    console.log(`📝 Files received: ${files.length}, Files with content: ${files.filter(f => f.content).length}`);
 
     const startTime = Date.now();
     
