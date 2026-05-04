@@ -15,7 +15,6 @@ import { toPng } from 'html-to-image';
 import HeroSection from './components/Homepage/HeroSection';
 import ImpactComparison from './components/Homepage/ImpactComparison';
 import HowItWorks from './components/Homepage/HowItWorks';
-import FeaturesGrid from './components/Homepage/FeaturesGrid';
 import CTASection from './components/Homepage/CTASection';
 
 // Tab Content Components
@@ -1275,7 +1274,6 @@ Keep response structured, concise, and easy to scan using bullet points.`;
               />
               <ImpactComparison />
               <HowItWorks />
-              <FeaturesGrid />
               <CTASection />
             </>
           )}
