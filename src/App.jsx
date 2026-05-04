@@ -1138,15 +1138,12 @@ Keep response structured, concise, and easy to scan using bullet points.`;
                 tabs={tabs}
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
+                onDownloadPDF={handleDownloadPDF}
+                isGeneratingPDF={isGeneratingPDF}
               />
 
               <div className="results-header">
                 <TimeSavedBadge repoSize={repoSize} isVisible={analysisComplete} />
-                <DownloadPDFButton
-                  isVisible={analysisComplete}
-                  onClick={handleDownloadPDF}
-                  isGenerating={isGeneratingPDF}
-                />
               </div>
 
               <div className="tab-content-wrapper">

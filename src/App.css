@@ -102,7 +102,7 @@
   flex: 1;
   width: 100%;
   padding: 0;
-  padding-top: 180px; /* Increased to account for fixed header (100px) + fixed tab nav (80px) */
+  padding-top: 170px; /* Account for fixed header (100px) + fixed tab nav (70px) */
 }
 
 /* Split-Screen Layout */
@@ -451,12 +451,11 @@
 
 .results-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md);
 }
 
 /* ===================================
@@ -550,19 +549,27 @@
   left: 0;
   right: 0;
   z-index: 999;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: 0.5rem;
-  margin-bottom: var(--spacing-md);
-  box-shadow: var(--shadow-lg);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.tab-nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-md);
 }
 
 .tab-list {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .tab-button {
@@ -588,6 +595,41 @@
   background: var(--gradient-primary);
   color: white;
   box-shadow: var(--glow-primary);
+}
+
+/* Download PDF Button in Navbar */
+.download-pdf-btn-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0.75rem 1.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-base);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.download-pdf-btn-nav:hover:not(:disabled) {
+  background: var(--glass-bg-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-primary);
+}
+
+.download-pdf-btn-nav:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.download-pdf-btn-nav .download-icon {
+  font-size: 1.1rem;
 }
 
 /* ===================================
@@ -4870,3 +4912,25 @@ body.printing-pdf .pdf-print-header {
 }
 
 /* Made with Bob */
+
+/* Responsive Design for Tab Navigation */
+@media (max-width: 768px) {
+  .tab-nav-container {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .tab-list {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .download-pdf-btn-nav {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .main-content {
+    padding-top: 220px; /* More space for stacked mobile layout */
+  }
+}
