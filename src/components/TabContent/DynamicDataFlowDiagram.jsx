@@ -517,14 +517,16 @@ const FlowNode = ({ node }) => {
 function DynamicDataFlowDiagram({ codeAnalysis }) {
   // Callback to handle React Flow initialization and auto-fit view
   const onInit = useCallback((reactFlowInstance) => {
+    console.log('🎯 DynamicDataFlowDiagram: onInit called');
     // Delay to ensure nodes are fully rendered before fitting view
     setTimeout(() => {
+      console.log('🎯 DynamicDataFlowDiagram: Calling fitView');
       reactFlowInstance.fitView({
-        padding: 0.2,
-        duration: 800,
+        padding: 0.3,
+        duration: 1000,
         includeHiddenNodes: false
       });
-    }, 100);
+    }, 200);
   }, []);
 
   const { nodes, edges } = useMemo(() => {
@@ -638,12 +640,12 @@ function DynamicDataFlowDiagram({ codeAnalysis }) {
             onInit={onInit}
             fitView
             fitViewOptions={{
-              padding: 0.2,
+              padding: 0.3,
               includeHiddenNodes: false,
-              minZoom: 0.5,
-              maxZoom: 1.5
+              minZoom: 0.8,
+              maxZoom: 2
             }}
-            defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+            defaultViewport={{ x: 0, y: 0, zoom: 1.2 }}
             attributionPosition="bottom-left"
             minZoom={0.1}
             maxZoom={2}
