@@ -111,26 +111,26 @@ function HeroSection({ repoUrl, onUrlChange, onAnalyze, isAnalyzing }) {
         </form>
 
         <div className="hero-footer-section">
-          <div className="hero-trust-indicators">
-            <div className="trust-item">
-              <div className="trust-value">10x</div>
-              <div className="trust-label">Faster</div>
-              <div className="trust-sublabel">Code Analysis</div>
+          <div className="impact-stats">
+            <div className="impact-stat">
+              <div className="stat-value">10x</div>
+              <div className="stat-label">Faster</div>
+              <div className="stat-sublabel">Code Analysis</div>
             </div>
-            <div className="trust-item">
-              <div className="trust-value">90%</div>
-              <div className="trust-label">Time Saved</div>
-              <div className="trust-sublabel">On Documentation</div>
+            <div className="impact-stat">
+              <div className="stat-value">90%</div>
+              <div className="stat-label">Time Saved</div>
+              <div className="stat-sublabel">On Documentation</div>
             </div>
-            <div className="trust-item">
-              <div className="trust-value">95%</div>
-              <div className="trust-label">Faster</div>
-              <div className="trust-sublabel">Security Scans</div>
+            <div className="impact-stat">
+              <div className="stat-value">95%</div>
+              <div className="stat-label">Faster</div>
+              <div className="stat-sublabel">Security Scans</div>
             </div>
-            <div className="trust-item">
-              <div className="trust-value">80%</div>
-              <div className="trust-label">Less</div>
-              <div className="trust-sublabel">Onboarding Time</div>
+            <div className="impact-stat">
+              <div className="stat-value">80%</div>
+              <div className="stat-label">Less</div>
+              <div className="stat-sublabel">Onboarding Time</div>
             </div>
           </div>
 
