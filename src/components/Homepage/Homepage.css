@@ -385,6 +385,46 @@
   animation: fadeInUp 0.8s ease 0.5s both;
 }
 
+.hero-footer-section .impact-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  border: none;
+}
+
+.hero-footer-section .impact-stat {
+  text-align: center;
+}
+
+.hero-footer-section .impact-stat .stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4F8CFF;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  margin-bottom: 0.25rem;
+}
+
+.hero-footer-section .impact-stat .stat-label {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  font-weight: 500;
+}
+
+.hero-footer-section .impact-stat .stat-sublabel {
+  font-size: 0.7rem;
+  color: #718096;
+  font-weight: 400;
+  margin-top: 0.15rem;
+}
+
 .hero-powered-by {
   font-size: 0.875rem;
   color: #718096;
