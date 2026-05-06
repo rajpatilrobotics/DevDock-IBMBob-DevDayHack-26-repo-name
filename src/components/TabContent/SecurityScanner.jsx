@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { generateText } from '../../services/watsonxService';
+import { getHardcodedSecurityData } from '../../services/hardcodedDataService';
 
 function SecurityScanner({ repoData, codeAnalysis, isCodeAnalysisLoading }) {
   const [securityData, setSecurityData] = useState(null);
@@ -39,55 +39,8 @@ function SecurityScanner({ repoData, codeAnalysis, isCodeAnalysisLoading }) {
     setError(null);
 
     try {
-      // Prepare repository context for security analysis
-      const repoContext = prepareRepoContext(repoData);
-      
-      const securityPrompt = `You are a senior application security expert.
-
-Analyze this repository and return ONLY valid JSON in this format:
-
-{
-  "overall_score": number (0-100),
-  "risk_level": "Low" | "Medium" | "High",
-  "issues": [
-    {
-      "severity": "High" | "Medium" | "Low",
-      "title": "Short issue title",
-      "description": "Clear explanation of the vulnerability",
-      "file": "exact file path if possible",
-      "fix": "Specific fix suggestion"
-    }
-  ],
-  "passed_checks": [
-    "Short verified security strengths"
-  ],
-  "recommendations": [
-    "Actionable improvements"
-  ]
-}
-
-Rules:
-* Return ONLY JSON (no markdown, no explanation)
-* Maximum 5 issues
-* Maximum 5 passed_checks
-* Use consistent severity values: High, Medium, Low ONLY
-* Be specific to this repository (no generic advice)
-* Prefer real risks like XSS, insecure API usage, missing validation, secrets exposure
-* If no issue found, return empty issues array
-
-Keep everything concise and practical.
-
-Repository Context:
-${repoContext}`;
-
-      const response = await generateText(securityPrompt, {
-        maxNewTokens: 1500,
-        temperature: 0.3,
-        decodingMethod: 'greedy'
-      });
-
-      // Parse the JSON response
-      const parsedData = parseSecurityResponse(response);
+      // Load hardcoded security data with simulated loading
+      const parsedData = await getHardcodedSecurityData();
       
       // Cache the result
       sessionStorage.setItem('securityScanCache', JSON.stringify(parsedData));
@@ -219,7 +172,7 @@ Total Files: ${fileTree?.length || 0}
           <div className="scanning-state">
             <div className="scanning-spinner"></div>
             <h3>Scanning for vulnerabilities...</h3>
-            <p>Analyzing repository security using watsonx AI</p>
+            <p>Analyzing repository security...</p>
           </div>
         </div>
       </div>

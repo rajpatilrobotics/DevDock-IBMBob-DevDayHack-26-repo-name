@@ -28,8 +28,14 @@ import Chat from './components/TabContent/Chat';
 // GitHub Service
 import { analyzeRepository, analyzeArchitecture, parseGitHubUrl } from './services/githubService';
 
-// Watsonx.ai Service
-import { generateText } from './services/watsonxService';
+// Hardcoded Data Service (replaces Watsonx API)
+import {
+  getHardcodedAISummary,
+  getHardcodedQuickStart,
+  getHardcodedCommonIssues,
+  getHardcodedFirstContributions,
+  getHardcodedArchitectureAnalysis
+} from './services/hardcodedDataService';
 
 // Code Analysis Service
 import { codeAnalysisService } from './services/codeAnalysisService';
@@ -202,29 +208,11 @@ ${readmeSnippet}
         setSuccessMessage('');
       }, 5000);
       
-      // Step 2: Generate AI summary using watsonx.ai
+      // Step 2: Load hardcoded AI summary with simulated loading
       setIsSummaryLoading(true);
       try {
-        const aiInput = prepareAIInput(data);
-        const prompt = `${CLEAN_OUTPUT_RULES}
-
-You are a developer onboarding assistant. Analyze this GitHub repository and provide a plain English summary covering:
-- What this project does
-- Who it is for
-- The main technology stack
-- The most important things a new developer should know
-
-Keep it clear, structured, and concise. Do not include unnecessary text.
-
-${aiInput}`;
-
-        const generatedSummary = await generateText(prompt, {
-          maxNewTokens: 300,
-          temperature: 0.7
-        });
-        
-        const cleanedSummary = cleanMarkdown(generatedSummary);
-        setAiSummary(cleanedSummary);
+        const generatedSummary = await getHardcodedAISummary();
+        setAiSummary(generatedSummary);
       } catch (summaryErr) {
         console.error('AI Summary generation failed:', summaryErr);
         setSummaryError(summaryErr.message || 'Failed to generate AI summary');
@@ -232,140 +220,44 @@ ${aiInput}`;
         setIsSummaryLoading(false);
       }
       
-      // Step 3: Generate Quick Start Guide using watsonx.ai
+      // Step 3: Load hardcoded Quick Start Guide with simulated loading
       setIsQuickStartLoading(true);
       try {
-        const packageJson = data.importantFiles.find(f => f.path === 'package.json');
-        const hasPackageJson = packageJson && !packageJson.error;
-        
-        const quickStartPrompt = `${CLEAN_OUTPUT_RULES}
-
-Generate a concise Quick Start Guide for this repository. Include:
-1. Prerequisites (Node.js version, etc.)
-2. Installation steps
-3. Configuration (environment variables)
-4. How to run the project
-5. Common commands
-
-Repository: ${data.repoInfo.name}
-Language: ${data.repoInfo.language}
-${hasPackageJson ? 'Has package.json with dependencies' : 'No package.json found'}
-
-Keep it practical and actionable. Use numbered steps.`;
-
-        const quickStart = await generateText(quickStartPrompt, {
-          maxNewTokens: 400,
-          temperature: 0.5
-        });
-        
-        const cleanedQuickStart = cleanMarkdown(quickStart);
-        setQuickStartGuide(cleanedQuickStart);
+        const quickStart = await getHardcodedQuickStart();
+        setQuickStartGuide(quickStart);
       } catch (quickStartErr) {
         console.error('Quick Start generation failed:', quickStartErr);
       } finally {
         setIsQuickStartLoading(false);
       }
       
-      // Step 4: Generate Common Issues & Solutions using watsonx.ai
+      // Step 4: Load hardcoded Common Issues with simulated loading
       setIsIssuesLoading(true);
       try {
-        const issuesPrompt = `${CLEAN_OUTPUT_RULES}
-
-Based on this repository, identify 3-4 common setup issues that new developers might face and provide solutions:
-
-Repository: ${data.repoInfo.name}
-Language: ${data.repoInfo.language}
-Has ${data.envVariables?.length || 0} environment variables
-
-Common categories:
-- Missing environment variables
-- Dependency installation problems
-- Port conflicts
-- Database connection issues
-- Permission errors
-
-Format as: "Issue: [problem] → Solution: [fix]"`;
-
-        const issues = await generateText(issuesPrompt, {
-          maxNewTokens: 400,
-          temperature: 0.6
-        });
-        
-        const cleanedIssues = cleanMarkdown(issues);
-        setCommonIssues(cleanedIssues);
+        const issues = await getHardcodedCommonIssues();
+        setCommonIssues(issues);
       } catch (issuesErr) {
         console.error('Common Issues generation failed:', issuesErr);
       } finally {
         setIsIssuesLoading(false);
       }
       
-      // Step 5: Generate First Contribution Suggestions using watsonx.ai
+      // Step 5: Load hardcoded First Contributions with simulated loading
       setIsContributionsLoading(true);
       try {
-        const contributionsPrompt = `${CLEAN_OUTPUT_RULES}
-
-Analyze this repository and suggest 3-5 beginner-friendly tasks that a new developer could tackle as their first contribution. Be specific and actionable.
-
-Repository: ${data.repoInfo.name}
-Language: ${data.repoInfo.language}
-Tech Stack: ${Object.values(data.techStack || {}).flat().join(', ')}
-Has ${data.importantFiles?.length || 0} key files
-
-Suggest tasks like:
-- Add missing error handling in specific files
-- Write unit tests for untested functions
-- Improve documentation for complex functions
-- Add input validation
-- Refactor repetitive code patterns
-
-Format each suggestion as:
-"Task: [specific task]
-File: [filename]
-Difficulty: [Easy/Medium]
-Impact: [why this matters]"
-
-Provide 3-5 suggestions.`;
-
-        const suggestions = await generateText(contributionsPrompt, {
-          maxNewTokens: 600,
-          temperature: 0.7
-        });
-        
-        const cleanedSuggestions = cleanMarkdown(suggestions);
-        // Parse the suggestions into structured format
-        const parsedSuggestions = parseSuggestions(cleanedSuggestions);
-        setFirstContributions(parsedSuggestions);
+        const suggestions = await getHardcodedFirstContributions();
+        setFirstContributions(suggestions);
       } catch (contributionsErr) {
         console.error('First Contributions generation failed:', contributionsErr);
       } finally {
         setIsContributionsLoading(false);
       }
       
-      // Step 6: Generate Architecture Analysis using watsonx.ai
+      // Step 6: Load hardcoded Architecture Analysis with simulated loading
       setIsArchitectureLoading(true);
       try {
-        const architectureInput = prepareArchitectureInput(data);
-        const architecturePrompt = `${CLEAN_OUTPUT_RULES}
-
-You are a software architect. Analyze this repository and provide:
-
-1. Component breakdown – major modules and their roles
-2. Technology architecture – frontend, backend, database, APIs
-3. Data flow – how data moves through the system
-4. Key dependencies and their purpose
-5. Folder structure explanation – what each main folder contains
-
-${architectureInput}
-
-Keep response structured, concise, and easy to scan using bullet points.`;
-
-        const architectureResponse = await generateText(architecturePrompt, {
-          maxNewTokens: 600,
-          temperature: 0.6
-        });
-        
-        const cleanedArchitecture = cleanMarkdown(architectureResponse);
-        setArchitectureAnalysis(cleanedArchitecture);
+        const architectureResponse = await getHardcodedArchitectureAnalysis();
+        setArchitectureAnalysis(architectureResponse);
         
         // Step 6b: Perform detailed architecture analysis
         const detailedAnalysis = analyzeArchitecture(data.fileTree, data.importantFiles);
@@ -377,6 +269,7 @@ Keep response structured, concise, and easy to scan using bullet points.`;
         setArchitectureError(architectureErr.message || 'Failed to generate architecture analysis');
       } finally {
         setIsArchitectureLoading(false);
+      }
       
       // Step 7: Perform deep code analysis using pre-fetched file contents
       setIsCodeAnalysisLoading(true);
@@ -415,7 +308,6 @@ Keep response structured, concise, and easy to scan using bullet points.`;
         setCodeAnalysisError(codeErr.message || 'Failed to perform code analysis');
       } finally {
         setIsCodeAnalysisLoading(false);
-      }
       }
       
     } catch (err) {

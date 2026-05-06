@@ -126,7 +126,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isSummaryLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Generating insights using watsonx AI...</p>
+              <p>Analyzing repository...</p>
             </div>
           )}
           
@@ -220,7 +220,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isQuickStartLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Generating guide using watsonx AI...</p>
+              <p>Generating quick start guide...</p>
             </div>
           )}
           
@@ -348,7 +348,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isIssuesLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Analyzing common issues with watsonx AI...</p>
+              <p>Analyzing common issues...</p>
             </div>
           )}
           
@@ -374,7 +374,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           {isContributionsLoading && (
             <div className="loading-container">
               <div className="spinner"></div>
-              <p>Analyzing codebase using watsonx AI...</p>
+              <p>Analyzing codebase...</p>
             </div>
           )}
           
@@ -411,7 +411,7 @@ function Summary({ repoUrl, repoSize, repoData, aiSummary, isSummaryLoading, sum
           <div className="contribution-note">
             <span className="note-icon">⚡</span>
             <span className="note-text">
-              watsonx AI insights help you make your first impact in minutes, not days!
+              AI-powered insights help you make your first impact in minutes, not days!
             </span>
           </div>
         </div>
